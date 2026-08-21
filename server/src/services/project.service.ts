@@ -13,16 +13,16 @@ export async function getProjectsForUser(userId: string, query: ProjectQueryInpu
     const where = accessFilter;
     const skip = (query.page - 1) * query.limit;
 
-    const [projects, total] = await prisma.$transaction([
+    const [projects, total] = await Promise.all([
         prisma.project.findMany({
             where,
             skip,
             take: query.limit,
-        include: {
-            owner: { select: { id: true, name: true, email: true } },
-            _count: { select: { tasks: true } },
-        },
-        orderBy: { createdAt: 'desc' },
+            include: {
+                owner: { select: { id: true, name: true, email: true } },
+                _count: { select: { tasks: true } },
+            },
+            orderBy: { createdAt: 'desc' },
         }),
         prisma.project.count({ where }),
     ]);
