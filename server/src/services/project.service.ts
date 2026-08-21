@@ -2,7 +2,7 @@
 // Project business logic: create and retrieve projects.
 
 import prisma from '../db/prisma';
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { AppError } from '../middleware/error.middleware';
 import type { CreateProjectInput, ProjectQueryInput } from '../validators/project.validators';
 
@@ -39,16 +39,34 @@ export async function getProjectsForUser(userId: string, query: ProjectQueryInpu
 }
 
 export async function createProject(userId: string, input: CreateProjectInput) {
-    return prisma.project.create({
-        data: {
-            title: input.title,
-            description: input.description,
-            ownerId: userId,
-        },
-        include: {
-            owner: { select: { id: true, name: true, email: true } },
-        },
+    // Ensure the same owner cannot create two projects with identical names (case-insensitive)
+    const duplicate = await prisma.project.findFirst({
+        where: { ownerId: userId, title: { equals: input.title, mode: 'insensitive' } },
+        select: { id: true },
     });
+    if (duplicate) {
+        throw new AppError(409, `You already have a project named "${input.title}"`);
+    }
+
+    try {
+        return await prisma.project.create({
+            data: {
+                title: input.title,
+                description: input.description,
+                ownerId: userId,
+            },
+            include: {
+                owner: { select: { id: true, name: true, email: true } },
+            },
+        });
+    } catch (error) {
+        // The database constraint covers concurrent requests that pass the
+        // application-level duplicate check at the same time.
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+            throw new AppError(409, `You already have a project named "${input.title}"`);
+        }
+        throw error;
+    }
 }
 
 export async function getProjectById(projectId: string, userId: string) {
