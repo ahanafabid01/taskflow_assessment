@@ -5,6 +5,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import type { User } from '@/types';
 import { TOKEN_KEY, UNAUTHORIZED_EVENT, USER_KEY } from './session';
 
@@ -23,6 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [token, setToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         const timer = window.setTimeout(() => {
@@ -46,6 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         function handleUnauthorized() {
+            queryClient.clear();
             localStorage.removeItem(TOKEN_KEY);
             localStorage.removeItem(USER_KEY);
             setToken(null);
@@ -55,9 +58,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         window.addEventListener(UNAUTHORIZED_EVENT, handleUnauthorized);
         return () => window.removeEventListener(UNAUTHORIZED_EVENT, handleUnauthorized);
-    }, [router]);
+    }, [queryClient, router]);
 
     function login(newToken: string, newUser: User) {
+        // Cached API data belongs to the previous session, never to the next user.
+        queryClient.clear();
         localStorage.setItem(TOKEN_KEY, newToken);
         localStorage.setItem(USER_KEY, JSON.stringify(newUser));
         setToken(newToken);
@@ -65,11 +70,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     function logout() {
+        queryClient.clear();
         localStorage.removeItem(TOKEN_KEY);
         localStorage.removeItem(USER_KEY);
         setToken(null);
         setUser(null);
-        router.push('/login');
+        router.replace('/login');
     }
 
     return (

@@ -9,13 +9,17 @@ import {
     deleteTaskApi,
 } from '@/lib/api/tasks';
 import { QUERY_KEYS } from '@/types';
+import { useAuth } from '@/lib/auth/auth-context';
 import type { CreateTaskInput, UpdateTaskInput, TaskFilters, Task, TaskStatus } from '@/types';
 
 export function useProjectTasks(projectId: string, filters: TaskFilters = {}) {
+    const { user } = useAuth();
+    const userId = user?.id ?? '';
+
     return useQuery({
-        queryKey: QUERY_KEYS.projectTasksFiltered(projectId, filters),
+        queryKey: QUERY_KEYS.projectTasksFiltered(userId, projectId, filters),
         queryFn: () => getProjectTasksApi(projectId, filters),
-        enabled: !!projectId,
+        enabled: Boolean(userId && projectId),
         // Keep the visible board stable while search/filter results are loading.
         placeholderData: keepPreviousData,
     });
@@ -23,19 +27,23 @@ export function useProjectTasks(projectId: string, filters: TaskFilters = {}) {
 
 export function useCreateTask(projectId: string) {
     const queryClient = useQueryClient();
+    const { user } = useAuth();
 
     return useMutation({
         mutationFn: (data: CreateTaskInput) => createTaskApi(projectId, data),
         onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: QUERY_KEYS.projectTasks(projectId),
-            });
+            if (user) {
+                queryClient.invalidateQueries({
+                    queryKey: QUERY_KEYS.projectTasks(user.id, projectId),
+                });
+            }
         },
     });
 }
 
 export function useUpdateTask(projectId: string) {
     const queryClient = useQueryClient();
+    const { user } = useAuth();
 
     return useMutation({
         mutationFn: ({ taskId, data }: { taskId: string; data: UpdateTaskInput }) =>
@@ -44,18 +52,20 @@ export function useUpdateTask(projectId: string) {
         // Optimistic update — immediately update the task in cache before the API responds
         onMutate: async ({ taskId, data }) => {
             // Cancel any in-flight refetches
+            if (!user) return { previousTasks: [] };
+
             await queryClient.cancelQueries({
-                queryKey: QUERY_KEYS.projectTasks(projectId),
+                queryKey: QUERY_KEYS.projectTasks(user.id, projectId),
             });
 
             // Snapshot previous value for rollback
             const previousTasks = queryClient.getQueriesData<Task[]>({
-                queryKey: QUERY_KEYS.projectTasks(projectId),
+                queryKey: QUERY_KEYS.projectTasks(user.id, projectId),
             });
 
             // Optimistically update all matching query cache entries (different filter combos)
             queryClient.setQueriesData<Task[]>(
-                { queryKey: QUERY_KEYS.projectTasks(projectId) },
+                { queryKey: QUERY_KEYS.projectTasks(user.id, projectId) },
                 (old) =>
                     old?.map((task) =>
                         task.id === taskId ? { ...task, ...data } : task,
@@ -76,22 +86,27 @@ export function useUpdateTask(projectId: string) {
 
         // Always refetch after settle to ensure server state is correct
         onSettled: () => {
-            queryClient.invalidateQueries({
-                queryKey: QUERY_KEYS.projectTasks(projectId),
-            });
+            if (user) {
+                queryClient.invalidateQueries({
+                    queryKey: QUERY_KEYS.projectTasks(user.id, projectId),
+                });
+            }
         },
     });
 }
 
 export function useDeleteTask(projectId: string) {
     const queryClient = useQueryClient();
+    const { user } = useAuth();
 
     return useMutation({
         mutationFn: (taskId: string) => deleteTaskApi(taskId),
         onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: QUERY_KEYS.projectTasks(projectId),
-            });
+            if (user) {
+                queryClient.invalidateQueries({
+                    queryKey: QUERY_KEYS.projectTasks(user.id, projectId),
+                });
+            }
         },
     });
 }
