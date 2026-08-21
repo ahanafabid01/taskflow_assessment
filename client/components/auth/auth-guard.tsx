@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/auth-context';
+import { FullPageLoader } from '@/components/ui/loading';
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, token, isLoading } = useAuth();
@@ -16,9 +17,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   }, [hasSession, isLoading, router]);
 
   if (isLoading || !hasSession) {
-    return (
-      <div style={{ minHeight: '100dvh', background: 'var(--bg-primary)' }} aria-busy="true" />
-    );
+    return <FullPageLoader label="Loading" />;
   }
 
   return <>{children}</>;

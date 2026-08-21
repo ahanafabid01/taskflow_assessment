@@ -1,4 +1,4 @@
-# TaskFlow Assessment
+# TaskFlow - Octobrain
 
 TaskFlow is a full-stack Kanban project-management application built for the Octobrain assessment. It provides JWT authentication, project pagination, task assignment, filtering, and drag-and-drop task status updates.
 

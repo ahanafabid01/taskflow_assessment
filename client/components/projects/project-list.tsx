@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { Plus, Folder, FolderPlus, Layers, X, CheckSquare, ChevronLeft, ChevronRight, LayoutGrid, Table } from 'lucide-react';
 import { useProjects, useCreateProject } from '@/hooks/use-projects';
 import { AppNavbar } from '@/components/layout/app-navbar';
+import { ProjectListSkeleton } from '@/components/ui/loading';
 import type { Project } from '@/types';
 
 function ProjectCard({ project, onClick }: { project: Project; onClick: () => void }) {
@@ -260,11 +261,7 @@ export function ProjectList() {
     const pagination = data?.pagination;
 
     if (isLoading) {
-        return (
-            <div className="min-h-dvh flex items-center justify-center">
-                <div className="text-slate-600 text-[15px]">Loading projects…</div>
-            </div>
-        );
+        return <ProjectListSkeleton />;
     }
 
     return (

@@ -23,6 +23,7 @@ import { TaskModal } from '../tasks/task-modal';
 import { TaskFiltersBar } from '../tasks/task-filters';
 import { useProjectTasks, useCreateTask, useUpdateTask, useDeleteTask } from '@/hooks/use-tasks';
 import { useProject } from '@/hooks/use-projects';
+import { KanbanBoardSkeleton } from '@/components/ui/loading';
 import type { Task, TaskStatus, TaskFilters, CreateTaskInput, UpdateTaskInput } from '@/types';
 
 const STATUSES: TaskStatus[] = ['TODO', 'IN_PROGRESS', 'DONE'];
@@ -127,11 +128,7 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
     }, [deleteTask]);
 
     if (isLoading) {
-        return (
-            <div className="flex items-center justify-center h-[300px] text-slate-600">
-                Loading board…
-            </div>
-        );
+        return <KanbanBoardSkeleton />;
     }
 
     if (error) {
