@@ -283,8 +283,7 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
                                 tasks={tasksByStatus[status]}
                                 onEditTask={(task) => setModalTask(task)}
                                 onDeleteTask={handleDeleteTask}
-                                canCreate={isOwner}
-                                canDelete={isOwner}
+                                isOwner={isOwner}
                                 onAddTask={() => {
                                     if (!isOwner) return;
                                     setDefaultStatus(status);

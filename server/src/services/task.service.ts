@@ -88,9 +88,23 @@ export async function updateTask(
 
     if (!task) throw new AppError(404, 'Task not found');
 
-    // Allow owner or assignee to update
+    // Allow owner or assignee to access update endpoint
     if (task.project.ownerId !== userId && task.assignedTo !== userId) {
         throw new AppError(403, 'Access denied');
+    }
+
+    // Collaborators / assignees are only authorized to update task status (drag & drop)
+    const isOwner = task.project.ownerId === userId;
+    if (!isOwner) {
+        if (
+            input.title !== undefined ||
+            input.description !== undefined ||
+            input.priority !== undefined ||
+            input.assigned_to !== undefined ||
+            input.due_date !== undefined
+        ) {
+            throw new AppError(403, 'Collaborators can only update task status');
+        }
     }
 
     return prisma.task.update({

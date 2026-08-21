@@ -25,7 +25,7 @@ The Next.js pages and layout are Server Components by default. Interactive UI, b
 - Register and login with bcrypt-hashed passwords and JWT Bearer authentication
 - Protected projects and Kanban board routes; an expired or invalid session is cleared and redirected to `/login`
 - Create and paginate accessible projects (12 per page by default); project titles are unique per owner (enforced case-insensitively)
-- Create, edit, assign, filter, search, and delete tasks; collaborators see only tasks assigned to them
+- Create, edit, assign, filter, search, and delete tasks; collaborators can update assigned task status via drag-and-drop
 - Drag tasks between Todo, In Progress, and Done columns
 - TanStack Query caching, mutation invalidation, optimistic task updates, and debounced task search
 - Brand loading animations and shimmering skeleton screens for project cards and Kanban board
@@ -149,7 +149,7 @@ Authorization: Bearer <token>
 | GET | `/api/projects/:id` | Get an accessible project |
 | GET | `/api/projects/:id/tasks` | List project tasks; supports `search`, `status`, and `priority` |
 | POST | `/api/projects/:id/tasks` | Create a task (project owner) |
-| PATCH | `/api/tasks/:id` | Update a task (owner or assignee) |
+| PATCH | `/api/tasks/:id` | Update a task (owner can update all fields; assignee can update status) |
 | DELETE | `/api/tasks/:id` | Delete a task (project owner) |
 | GET | `/api/users` | List users for task assignment |
 

@@ -24,8 +24,7 @@ interface KanbanColumnProps {
     onEditTask: (task: Task) => void;
     onDeleteTask: (taskId: string) => void;
     onAddTask: () => void;
-    canCreate?: boolean;
-    canDelete?: boolean;
+    isOwner?: boolean;
 }
 
 export function KanbanColumn({
@@ -34,8 +33,7 @@ export function KanbanColumn({
     onEditTask,
     onDeleteTask,
     onAddTask,
-    canCreate = true,
-    canDelete = true,
+    isOwner = true,
 }: KanbanColumnProps) {
     const { setNodeRef, isOver } = useDroppable({ id: status });
     const config = COLUMN_CONFIG[status];
@@ -61,7 +59,7 @@ export function KanbanColumn({
                         <span className={`text-xs font-bold ${config.badgeText} ${config.badgeBg} px-2 py-0.5 rounded-full`}>
                             {tasks.length}
                         </span>
-                        {canCreate && (
+                        {isOwner && (
                             <button
                                 id={`add-task-${status.toLowerCase()}`}
                                 onClick={onAddTask}
@@ -84,13 +82,13 @@ export function KanbanColumn({
                             task={task}
                             onEdit={onEditTask}
                             onDelete={onDeleteTask}
-                            canDelete={canDelete}
+                            isOwner={isOwner}
                         />
                     ))}
                 </SortableContext>
 
                 {tasks.length === 0 && (
-                    canCreate ? (
+                    isOwner ? (
                         <div
                             onClick={onAddTask}
                             className="flex-1 flex flex-col items-center justify-center min-h-[120px] border border-dashed border-slate-300 rounded-[10px] text-slate-400 cursor-pointer bg-white transition-all hover:border-brand hover:text-brand"

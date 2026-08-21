@@ -111,14 +111,16 @@ Only the project owner can create tasks. Example body:
 }
 ```
 
-`status` defaults to `TODO`, `priority` defaults to `MEDIUM`, and `assigned_to` / `due_date` may be `null`.
+`status` defaults to `TODO`, `priority` defaults to `MEDIUM`, and `assigned_to` / `due_date` may be `null`. `due_date` cannot be in the past.
 
 ### `PATCH /api/tasks/:id`
 
-The project owner or assigned user can update a task. Submit at least one field from the create-task body. For example:
+Project owners can update any task field. Collaborators / assignees can update only the `status` field (e.g. via drag-and-drop); attempting to update other fields as a non-owner returns `403 Forbidden`.
+
+Example body:
 
 ```json
-{ "status": "IN_PROGRESS", "priority": "MEDIUM" }
+{ "status": "IN_PROGRESS" }
 ```
 
 ### `DELETE /api/tasks/:id`

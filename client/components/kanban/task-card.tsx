@@ -19,11 +19,11 @@ interface TaskCardProps {
     task: Task;
     onEdit: (task: Task) => void;
     onDelete?: (taskId: string) => void;
-    canDelete?: boolean;
+    isOwner?: boolean;
     isDragOverlay?: boolean;
 }
 
-export function TaskCard({ task, onEdit, onDelete, canDelete = true, isDragOverlay = false }: TaskCardProps) {
+export function TaskCard({ task, onEdit, onDelete, isOwner = true, isDragOverlay = false }: TaskCardProps) {
     const [showMenu, setShowMenu] = useState(false);
     const {
         attributes, listeners, setNodeRef, transform, transition, isDragging,
@@ -55,61 +55,63 @@ export function TaskCard({ task, onEdit, onDelete, canDelete = true, isDragOverl
                     {priority.label}
                 </span>
 
-                {/* Action menu */}
-                <div className="relative">
-                    <button
-                        data-no-dnd
-                        onPointerDown={(e) => e.stopPropagation()}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setShowMenu(!showMenu);
-                        }}
-                        aria-label="Task options"
-                        className="w-[26px] h-[26px] rounded-md bg-transparent border-none cursor-pointer flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors"
-                    >
-                        <MoreHorizontal size={16} />
-                    </button>
+                {/* Action menu (Only accessible by project owner) */}
+                {isOwner && (
+                    <div className="relative">
+                        <button
+                            data-no-dnd
+                            onPointerDown={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setShowMenu(!showMenu);
+                            }}
+                            aria-label="Task options"
+                            className="w-[26px] h-[26px] rounded-md bg-transparent border-none cursor-pointer flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors"
+                        >
+                            <MoreHorizontal size={16} />
+                        </button>
 
-                    {showMenu && (
-                        <>
-                            <div
-                                className="fixed inset-0 z-40"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setShowMenu(false);
-                                }}
-                            />
-                            <div className="absolute top-full right-0 z-50 bg-white border border-slate-200 rounded-lg min-w-[130px] overflow-hidden shadow-[0_8px_24px_rgba(15,23,42,0.12)]">
-                                <button
-                                    onPointerDown={(e) => e.stopPropagation()}
+                        {showMenu && (
+                            <>
+                                <div
+                                    className="fixed inset-0 z-40"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         setShowMenu(false);
-                                        onEdit(task);
                                     }}
-                                    className="flex items-center gap-2 w-full text-left px-3 py-2.5 bg-transparent border-none text-slate-900 text-[13px] font-medium cursor-pointer hover:bg-slate-100 transition-colors"
-                                >
-                                    <Pencil size={13} className="text-brand" />
-                                    Edit
-                                </button>
-                                {canDelete && onDelete && (
+                                />
+                                <div className="absolute top-full right-0 z-50 bg-white border border-slate-200 rounded-lg min-w-[130px] overflow-hidden shadow-[0_8px_24px_rgba(15,23,42,0.12)]">
                                     <button
                                         onPointerDown={(e) => e.stopPropagation()}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             setShowMenu(false);
-                                            onDelete(task.id);
+                                            onEdit(task);
                                         }}
-                                        className="flex items-center gap-2 w-full text-left px-3 py-2.5 bg-transparent border-none text-red-600 text-[13px] font-medium cursor-pointer hover:bg-red-50 transition-colors"
+                                        className="flex items-center gap-2 w-full text-left px-3 py-2.5 bg-transparent border-none text-slate-900 text-[13px] font-medium cursor-pointer hover:bg-slate-100 transition-colors"
                                     >
-                                        <Trash2 size={13} />
-                                        Delete
+                                        <Pencil size={13} className="text-brand" />
+                                        Edit
                                     </button>
-                                )}
-                            </div>
-                        </>
-                    )}
-                </div>
+                                    {onDelete && (
+                                        <button
+                                            onPointerDown={(e) => e.stopPropagation()}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setShowMenu(false);
+                                                onDelete(task.id);
+                                            }}
+                                            className="flex items-center gap-2 w-full text-left px-3 py-2.5 bg-transparent border-none text-red-600 text-[13px] font-medium cursor-pointer hover:bg-red-50 transition-colors"
+                                        >
+                                            <Trash2 size={13} />
+                                            Delete
+                                        </button>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* Task Title */}

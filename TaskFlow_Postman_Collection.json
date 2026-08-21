@@ -258,7 +258,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"IN_PROGRESS\",\n  \"priority\": \"MEDIUM\"\n}",
+              "raw": "{\n  \"status\": \"IN_PROGRESS\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
