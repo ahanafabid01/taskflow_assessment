@@ -1,11 +1,11 @@
 'use client';
 
 // components/projects/project-list.tsx
-// Responsive projects overview page with brand logo and professional Lucide icons.
+// Responsive projects overview page with brand logo, professional Lucide icons, and Card/Table view switcher.
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Folder, FolderPlus, Layers, X, CheckSquare, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Folder, FolderPlus, Layers, X, CheckSquare, ChevronLeft, ChevronRight, LayoutGrid, Table } from 'lucide-react';
 import { useProjects, useCreateProject } from '@/hooks/use-projects';
 import { AppNavbar } from '@/components/layout/app-navbar';
 import type { Project } from '@/types';
@@ -136,6 +136,178 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
     );
 }
 
+function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelect: (id: string) => void }) {
+    return (
+        <div
+            style={{
+                width: '100%',
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-lg)',
+                overflow: 'hidden',
+                boxShadow: 'var(--shadow-card)',
+            }}
+        >
+            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
+                    <thead>
+                        <tr style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border)' }}>
+                            <th style={{ padding: '14px 18px', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                Project
+                            </th>
+                            <th style={{ padding: '14px 18px', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                Description
+                            </th>
+                            <th style={{ padding: '14px 18px', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                Tasks
+                            </th>
+                            <th style={{ padding: '14px 18px', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                Owner
+                            </th>
+                            <th style={{ padding: '14px 18px', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                Created
+                            </th>
+                            <th style={{ padding: '14px 18px', textAlign: 'right', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {projects.map((project, idx) => {
+                            const taskCount = project._count?.tasks ?? 0;
+                            const createdDate = project.createdAt
+                                ? new Date(project.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                                : '—';
+
+                            return (
+                                <tr
+                                    key={project.id}
+                                    onClick={() => onSelect(project.id)}
+                                    style={{
+                                        borderBottom: idx < projects.length - 1 ? '1px solid var(--border-subtle)' : 'none',
+                                        cursor: 'pointer',
+                                        transition: 'background 0.15s ease',
+                                    }}
+                                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-elevated)')}
+                                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                                >
+                                    <td style={{ padding: '14px 18px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            <div
+                                                style={{
+                                                    width: '32px',
+                                                    height: '32px',
+                                                    borderRadius: '8px',
+                                                    background: 'linear-gradient(135deg, var(--accent-purple-dim), rgba(79, 126, 247, 0.15))',
+                                                    border: '1px solid var(--accent-purple-dim)',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    color: 'var(--accent-purple)',
+                                                    flexShrink: 0,
+                                                }}
+                                            >
+                                                <Folder size={16} />
+                                            </div>
+                                            <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+                                                {project.title}
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    <td style={{ padding: '14px 18px', maxWidth: '240px' }}>
+                                        <span
+                                            style={{
+                                                fontSize: '13px',
+                                                color: 'var(--text-secondary)',
+                                                display: '-webkit-box',
+                                                WebkitLineClamp: 1,
+                                                WebkitBoxOrient: 'vertical',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                            }}
+                                            title={project.description ?? ''}
+                                        >
+                                            {project.description || '—'}
+                                        </span>
+                                    </td>
+
+                                    <td style={{ padding: '14px 18px', whiteSpace: 'nowrap' }}>
+                                        <span
+                                            style={{
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                gap: '5px',
+                                                fontSize: '12px',
+                                                fontWeight: 500,
+                                                color: 'var(--text-secondary)',
+                                                background: 'var(--bg-elevated)',
+                                                padding: '2px 8px',
+                                                borderRadius: '20px',
+                                                border: '1px solid var(--border-subtle)',
+                                            }}
+                                        >
+                                            <CheckSquare size={12} />
+                                            {taskCount} {taskCount === 1 ? 'task' : 'tasks'}
+                                        </span>
+                                    </td>
+
+                                    <td style={{ padding: '14px 18px', whiteSpace: 'nowrap' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <div
+                                                style={{
+                                                    width: '22px',
+                                                    height: '22px',
+                                                    borderRadius: '50%',
+                                                    background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    fontSize: '10px',
+                                                    fontWeight: 700,
+                                                    color: 'white',
+                                                    flexShrink: 0,
+                                                }}
+                                            >
+                                                {project.owner.name.charAt(0).toUpperCase()}
+                                            </div>
+                                            <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+                                                {project.owner.name}
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    <td style={{ padding: '14px 18px', fontSize: '12.5px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
+                                        {createdDate}
+                                    </td>
+
+                                    <td style={{ padding: '14px 18px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                        <span
+                                            style={{
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                gap: '4px',
+                                                fontSize: '12px',
+                                                fontWeight: 600,
+                                                color: 'var(--accent-purple)',
+                                                padding: '4px 8px',
+                                                borderRadius: '6px',
+                                                background: 'rgba(124, 106, 247, 0.1)',
+                                            }}
+                                        >
+                                            Open Board <ChevronRight size={13} />
+                                        </span>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
 function CreateProjectModal({ onClose }: { onClose: () => void }) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -238,6 +410,7 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
 
 export function ProjectList() {
     const [showModal, setShowModal] = useState(false);
+    const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
     const [page, setPage] = useState(1);
     const router = useRouter();
 
@@ -271,26 +444,94 @@ export function ProjectList() {
                             {pagination?.total ?? 0} {(pagination?.total ?? 0) === 1 ? 'project' : 'projects'} total
                         </p>
                     </div>
-                    <button
-                        id="open-create-project"
-                        onClick={() => setShowModal(true)}
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '8px',
-                            padding: '10px 18px',
-                            background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
-                            border: 'none',
-                            borderRadius: '10px',
-                            color: 'white',
-                            fontSize: '14px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                        }}
-                    >
-                        <Plus size={16} /> New Project
-                    </button>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                        {/* View Switcher: Cards vs Table */}
+                        <div
+                            role="group"
+                            aria-label="Projects view mode"
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                background: 'var(--bg-elevated)',
+                                border: '1px solid var(--border)',
+                                borderRadius: '10px',
+                                padding: '3px',
+                                gap: '3px',
+                            }}
+                        >
+                            <button
+                                type="button"
+                                id="view-mode-grid"
+                                onClick={() => setViewMode('grid')}
+                                title="Card Grid View"
+                                aria-pressed={viewMode === 'grid'}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    padding: '7px 12px',
+                                    borderRadius: '7px',
+                                    border: 'none',
+                                    background: viewMode === 'grid' ? 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))' : 'transparent',
+                                    color: viewMode === 'grid' ? '#ffffff' : 'var(--text-secondary)',
+                                    fontSize: '13px',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.15s ease',
+                                }}
+                            >
+                                <LayoutGrid size={15} />
+                                <span>Cards</span>
+                            </button>
+                            <button
+                                type="button"
+                                id="view-mode-table"
+                                onClick={() => setViewMode('table')}
+                                title="Table View"
+                                aria-pressed={viewMode === 'table'}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    padding: '7px 12px',
+                                    borderRadius: '7px',
+                                    border: 'none',
+                                    background: viewMode === 'table' ? 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))' : 'transparent',
+                                    color: viewMode === 'table' ? '#ffffff' : 'var(--text-secondary)',
+                                    fontSize: '13px',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.15s ease',
+                                }}
+                            >
+                                <Table size={15} />
+                                <span>Table</span>
+                            </button>
+                        </div>
+
+                        {/* New Project Button */}
+                        <button
+                            id="open-create-project"
+                            onClick={() => setShowModal(true)}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '8px',
+                                padding: '10px 18px',
+                                background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
+                                border: 'none',
+                                borderRadius: '10px',
+                                color: 'white',
+                                fontSize: '14px',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                            }}
+                        >
+                            <Plus size={16} /> New Project
+                        </button>
+                    </div>
                 </div>
 
                 {error && (
@@ -325,7 +566,7 @@ export function ProjectList() {
                             <Plus size={16} /> Create Project
                         </button>
                     </div>
-                ) : (
+                ) : viewMode === 'grid' ? (
                     <div className="projects-grid">
                         {projects.map((project) => (
                             <ProjectCard
@@ -335,6 +576,11 @@ export function ProjectList() {
                             />
                         ))}
                     </div>
+                ) : (
+                    <ProjectTableView
+                        projects={projects}
+                        onSelect={(id) => router.push(`/projects/${id}`)}
+                    />
                 )}
 
                 {pagination && pagination.totalPages > 1 && (
