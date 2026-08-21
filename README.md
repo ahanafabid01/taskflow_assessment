@@ -55,7 +55,8 @@ Install server dependencies, generate Prisma Client, and use the current DB or s
 cd server
 npm install
 npx prisma generate
-# Run only when connecting to a new, empty database - Here it's connected with neon DB, THe Database URL is already in .env.example file and the schema is already pushed there.
+# Run only when connecting to a new, empty database - Here it's connected with neon DB, THe Database URL should be paste on it's filed with real credentials.
+# The schema is already pushed there.
 
 
 npx prisma db push
