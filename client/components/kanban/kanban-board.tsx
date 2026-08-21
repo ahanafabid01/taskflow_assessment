@@ -16,6 +16,7 @@ import {
     type DragEndEvent,
     type DragOverEvent,
 } from '@dnd-kit/core';
+import { Folder, Layers, ChevronDown, ChevronUp } from 'lucide-react';
 import { KanbanColumn } from './kanban-column';
 import { TaskCard } from './task-card';
 import { TaskModal } from '../tasks/task-modal';
@@ -46,6 +47,7 @@ interface KanbanBoardProps {
 export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: KanbanBoardProps) {
     const { data: project } = useProject(projectId);
     const [filters, setFilters] = useState<TaskFilters>({});
+    const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
     const [activeTask, setActiveTask] = useState<Task | null>(null);
     const [modalTask, setModalTask] = useState<Task | null | undefined>(undefined); // undefined = closed, null = create
     const [defaultStatus, setDefaultStatus] = useState<TaskStatus>('TODO');
@@ -155,33 +157,123 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', boxSizing: 'border-box' }}>
-            {/* Project Header: Title & Description */}
-            <div style={{ marginBottom: '22px' }}>
-                <h1
-                    style={{
-                        fontSize: 'clamp(20px, 3.5vw, 28px)',
-                        fontWeight: 700,
-                        color: 'var(--text-primary)',
-                        letterSpacing: '-0.025em',
-                        lineHeight: 1.25,
-                        margin: 0,
-                        marginBottom: displayDescription ? '6px' : '0',
-                    }}
-                >
-                    {displayTitle}
-                </h1>
+            {/* Project Header Card: Title, Badge & Clamped Description */}
+            <div
+                style={{
+                    marginBottom: '20px',
+                    background: 'var(--bg-card)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--radius-lg)',
+                    padding: '16px 20px',
+                    boxShadow: 'var(--shadow-card)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                }}
+            >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+                        <div
+                            style={{
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '10px',
+                                background: 'linear-gradient(135deg, var(--accent-purple-dim), rgba(79, 126, 247, 0.15))',
+                                border: '1px solid var(--accent-purple-dim)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'var(--accent-purple)',
+                                flexShrink: 0,
+                            }}
+                        >
+                            <Folder size={18} />
+                        </div>
+                        <h1
+                            style={{
+                                fontSize: 'clamp(18px, 2.5vw, 24px)',
+                                fontWeight: 700,
+                                color: 'var(--text-primary)',
+                                letterSpacing: '-0.02em',
+                                lineHeight: 1.25,
+                                margin: 0,
+                                wordBreak: 'break-word',
+                            }}
+                        >
+                            {displayTitle}
+                        </h1>
+                    </div>
+
+                    {/* Task Counter Badge */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                        <span
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                fontSize: '12px',
+                                fontWeight: 600,
+                                color: 'var(--text-secondary)',
+                                background: 'var(--bg-elevated)',
+                                padding: '4px 10px',
+                                borderRadius: '20px',
+                                border: '1px solid var(--border-subtle)',
+                            }}
+                        >
+                            <Layers size={13} style={{ color: 'var(--accent-purple)' }} />
+                            {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Project Description (Clamped with Show More toggle) */}
                 {displayDescription && (
-                    <p
-                        style={{
-                            fontSize: '14px',
-                            color: 'var(--text-secondary)',
-                            lineHeight: 1.5,
-                            margin: 0,
-                            maxWidth: '750px',
-                        }}
-                    >
-                        {displayDescription}
-                    </p>
+                    <div style={{ paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
+                        <p
+                            style={{
+                                fontSize: '13.5px',
+                                color: 'var(--text-secondary)',
+                                lineHeight: 1.55,
+                                margin: 0,
+                                display: isDescriptionExpanded ? 'block' : '-webkit-box',
+                                WebkitLineClamp: isDescriptionExpanded ? undefined : 2,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: isDescriptionExpanded ? 'visible' : 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'pre-wrap',
+                            }}
+                        >
+                            {displayDescription}
+                        </p>
+                        {displayDescription.length > 140 && (
+                            <button
+                                type="button"
+                                onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                                style={{
+                                    background: 'transparent',
+                                    border: 'none',
+                                    color: 'var(--accent-purple)',
+                                    fontSize: '12px',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    padding: '6px 0 0',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '4px',
+                                }}
+                            >
+                                {isDescriptionExpanded ? (
+                                    <>
+                                        Show less <ChevronUp size={13} />
+                                    </>
+                                ) : (
+                                    <>
+                                        Show more <ChevronDown size={13} />
+                                    </>
+                                )}
+                            </button>
+                        )}
+                    </div>
                 )}
             </div>
 
