@@ -2,6 +2,7 @@
 // Centralized API client — handles base URL, auth headers, JSON parsing, and error responses.
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
+import { TOKEN_KEY, UNAUTHORIZED_EVENT } from '@/lib/auth/session';
 
 interface ApiError {
     error: { message: string };
@@ -19,7 +20,7 @@ export class ApiRequestError extends Error {
 
 function getAuthHeader(): Record<string, string> {
     if (typeof window === 'undefined') return {};
-    const token = localStorage.getItem('taskflow_token');
+    const token = localStorage.getItem(TOKEN_KEY);
     return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
@@ -35,6 +36,9 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
     if (!response.ok) {
         const body = await response.json().catch(() => ({ error: { message: 'Unknown error' } })) as ApiError;
+        if (response.status === 401 && typeof window !== 'undefined') {
+            window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
+        }
         throw new ApiRequestError(response.status, body.error?.message ?? 'Request failed');
     }
 

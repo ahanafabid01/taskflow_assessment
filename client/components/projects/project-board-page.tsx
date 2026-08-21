@@ -5,6 +5,7 @@
 
 import { KanbanBoard } from '@/components/kanban/kanban-board';
 import { AppNavbar } from '@/components/layout/app-navbar';
+import { AuthGuard } from '@/components/auth/auth-guard';
 
 interface ProjectBoardPageProps {
     projectId: string;
@@ -12,6 +13,7 @@ interface ProjectBoardPageProps {
 
 export function ProjectBoardPage({ projectId }: ProjectBoardPageProps) {
     return (
+        <AuthGuard>
         <div style={{ minHeight: '100dvh', background: 'var(--bg-primary)', display: 'flex', flexDirection: 'column' }}>
             {/* Sleek App Navigation */}
             <AppNavbar
@@ -26,5 +28,6 @@ export function ProjectBoardPage({ projectId }: ProjectBoardPageProps) {
                 <KanbanBoard projectId={projectId} projectTitle="Project Board" />
             </main>
         </div>
+        </AuthGuard>
     );
 }

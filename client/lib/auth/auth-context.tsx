@@ -6,6 +6,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { User } from '@/types';
+import { TOKEN_KEY, UNAUTHORIZED_EVENT, USER_KEY } from './session';
 
 interface AuthContextValue {
     user: User | null;
@@ -16,9 +17,6 @@ interface AuthContextValue {
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
-
-const TOKEN_KEY = 'taskflow_token';
-const USER_KEY = 'taskflow_user';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
@@ -45,6 +43,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         return () => window.clearTimeout(timer);
     }, []);
+
+    useEffect(() => {
+        function handleUnauthorized() {
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(USER_KEY);
+            setToken(null);
+            setUser(null);
+            router.replace('/login');
+        }
+
+        window.addEventListener(UNAUTHORIZED_EVENT, handleUnauthorized);
+        return () => window.removeEventListener(UNAUTHORIZED_EVENT, handleUnauthorized);
+    }, [router]);
 
     function login(newToken: string, newUser: User) {
         localStorage.setItem(TOKEN_KEY, newToken);
