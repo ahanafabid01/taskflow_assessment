@@ -9,7 +9,6 @@ export const createProjectSchema = z.object({
 });
 
 export const projectQuerySchema = z.object({
-    search: z.string().trim().max(100).optional(),
     page: z.coerce.number().int().min(1).default(1),
     limit: z.coerce.number().int().min(1).max(24).default(12),
 });

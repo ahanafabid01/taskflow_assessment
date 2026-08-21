@@ -10,17 +10,7 @@ export async function getProjectsForUser(userId: string, query: ProjectQueryInpu
     const accessFilter: Prisma.ProjectWhereInput = {
         OR: [{ ownerId: userId }, { tasks: { some: { assignedTo: userId } } }],
     };
-    const searchFilter: Prisma.ProjectWhereInput | undefined = query.search
-        ? {
-            OR: [
-                { title: { contains: query.search, mode: 'insensitive' } },
-                { description: { contains: query.search, mode: 'insensitive' } },
-            ],
-        }
-        : undefined;
-    const where: Prisma.ProjectWhereInput = searchFilter
-        ? { AND: [accessFilter, searchFilter] }
-        : accessFilter;
+    const where = accessFilter;
     const skip = (query.page - 1) * query.limit;
 
     const [projects, total] = await prisma.$transaction([

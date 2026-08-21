@@ -75,7 +75,6 @@ export interface CreateProjectInput {
 }
 
 export interface ProjectFilters {
-  search?: string;
   page?: number;
   limit?: number;
 }

@@ -6,7 +6,6 @@ import type { Project, CreateProjectInput, ProjectFilters, ProjectPage } from '@
 
 export function getProjectsApi(filters: ProjectFilters = {}): Promise<ProjectPage> {
     const params = new URLSearchParams();
-    if (filters.search) params.set('search', filters.search);
     if (filters.page) params.set('page', String(filters.page));
     if (filters.limit) params.set('limit', String(filters.limit));
     const query = params.toString();

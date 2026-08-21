@@ -3,9 +3,9 @@
 // components/projects/project-list.tsx
 // Responsive projects overview page with brand logo and professional Lucide icons.
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Folder, FolderPlus, Layers, X, CheckSquare, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Folder, FolderPlus, Layers, X, CheckSquare, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useProjects, useCreateProject } from '@/hooks/use-projects';
 import { AppNavbar } from '@/components/layout/app-navbar';
 import type { Project } from '@/types';
@@ -238,28 +238,16 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
 
 export function ProjectList() {
     const [showModal, setShowModal] = useState(false);
-    const [search, setSearch] = useState('');
-    const [debouncedSearch, setDebouncedSearch] = useState('');
     const [page, setPage] = useState(1);
     const router = useRouter();
 
-    useEffect(() => {
-        const timer = window.setTimeout(() => setDebouncedSearch(search.trim()), 300);
-        return () => window.clearTimeout(timer);
-    }, [search]);
-
     const { data, isLoading, error } = useProjects({
-        search: debouncedSearch || undefined,
         page,
         limit: 12,
     });
     const projects = data?.projects ?? [];
     const pagination = data?.pagination;
 
-    function handleSearch(value: string) {
-        setSearch(value);
-        setPage(1);
-    }
 
     if (isLoading) {
         return (
@@ -310,26 +298,6 @@ export function ProjectList() {
                         Failed to load projects. Please refresh.
                     </div>
                 )}
-
-                <div style={{ position: 'relative', maxWidth: '420px', marginBottom: '24px' }}>
-                    <Search size={16} style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
-                    <input
-                        id="project-search"
-                        type="search"
-                        value={search}
-                        onChange={(event) => handleSearch(event.target.value)}
-                        placeholder="Search projects by title or description..."
-                        aria-label="Search projects"
-                        style={{ width: '100%', padding: '11px 38px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '9px', color: 'var(--text-primary)', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
-                        onFocus={(event) => (event.currentTarget.style.borderColor = 'var(--accent-purple)')}
-                        onBlur={(event) => (event.currentTarget.style.borderColor = 'var(--border)')}
-                    />
-                    {search && (
-                        <button type="button" onClick={() => handleSearch('')} aria-label="Clear search" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', padding: '3px' }}>
-                            <X size={15} />
-                        </button>
-                    )}
-                </div>
 
                 {!projects.length ? (
                     <div style={{ textAlign: 'center', padding: '60px 16px', background: 'var(--bg-card)', border: '1px dashed var(--border)', borderRadius: 'var(--radius-lg)' }}>
