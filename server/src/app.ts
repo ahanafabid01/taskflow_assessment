@@ -23,6 +23,16 @@ app.use(
   }),
 );
 
+// Request response-time logger
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const elapsed = Date.now() - start;
+    console.log(`${req.method} ${req.originalUrl} ${res.statusCode} - ${elapsed}ms`);
+  });
+  next();
+});
+
 // Parse JSON bodies (with size limit to prevent payload abuse)
 app.use(express.json({ limit: '50kb' }));
 
