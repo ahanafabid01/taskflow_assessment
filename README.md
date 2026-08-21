@@ -4,7 +4,7 @@ TaskFlow is a full-stack Kanban project-management application built for the Oct
 
 ## Stack
 
-- **Client:** Next.js App Router, React, TypeScript, Tailwind CSS, TanStack Query, dnd-kit
+- **Client:** Next.js App Router, React, TypeScript, Vanilla CSS (CSS Custom Properties), TanStack Query, dnd-kit
 - **API:** Express 5, TypeScript, Zod, JWT, bcrypt, Helmet, CORS
 - **Database:** PostgreSQL with Prisma ORM
 

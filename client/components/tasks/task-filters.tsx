@@ -28,37 +28,19 @@ export function TaskFiltersBar({ filters, onChange }: TaskFiltersProps) {
         [filters, onChange],
     );
 
-    const PRIORITY_COLORS: Record<TaskPriority, { color: string; bg: string; border: string }> = {
-        LOW: { color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0' },
-        MEDIUM: { color: '#d97706', bg: '#fffbeb', border: '#fde68a' },
-        HIGH: { color: '#dc2626', bg: '#fef2f2', border: '#fecaca' },
+    const PRIORITY_STYLES: Record<TaskPriority, { active: string; inactive: string }> = {
+        LOW:    { active: 'bg-green-50 border-green-200 text-green-600',   inactive: 'bg-white border-slate-200 text-slate-600' },
+        MEDIUM: { active: 'bg-amber-50 border-amber-200 text-amber-600',   inactive: 'bg-white border-slate-200 text-slate-600' },
+        HIGH:   { active: 'bg-red-50   border-red-200   text-red-600',     inactive: 'bg-white border-slate-200 text-slate-600' },
     };
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                gap: '12px',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: '100%',
-                boxSizing: 'border-box',
-            }}
-        >
+        <div className="flex flex-row flex-wrap gap-3 items-center justify-between w-full box-border">
             {/* Search Input */}
-            <div style={{ position: 'relative', flex: '1 1 280px', width: '100%', maxWidth: '100%' }}>
+            <div className="relative flex-[1_1_280px] w-full max-w-full">
                 <Search
                     size={15}
-                    style={{
-                        position: 'absolute',
-                        left: '12px',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        color: 'var(--text-muted)',
-                        pointerEvents: 'none',
-                    }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
                 />
                 <input
                     id="task-search"
@@ -66,46 +48,14 @@ export function TaskFiltersBar({ filters, onChange }: TaskFiltersProps) {
                     value={filters.search ?? ''}
                     onChange={handleSearch}
                     placeholder="Search tasks by title..."
-                    style={{
-                        width: '100%',
-                        padding: '9px 36px 9px 36px',
-                        background: '#ffffff',
-                        border: '1px solid #cbd5e1',
-                        borderRadius: '8px',
-                        color: 'var(--text-primary)',
-                        fontSize: '14px',
-                        outline: 'none',
-                        boxSizing: 'border-box',
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
-                    }}
-                    onFocus={(e) => {
-                        e.target.style.borderColor = '#0c3e78';
-                        e.target.style.boxShadow = '0 0 0 3px rgba(12, 62, 120, 0.1)';
-                    }}
-                    onBlur={(e) => {
-                        e.target.style.borderColor = '#cbd5e1';
-                        e.target.style.boxShadow = '0 1px 2px rgba(0,0,0,0.03)';
-                    }}
+                    className="w-full py-[9px] px-[36px] bg-white border border-slate-300 rounded-lg text-slate-900 text-sm outline-none box-border shadow-[0_1px_2px_rgba(0,0,0,0.03)] focus:border-brand focus:shadow-[0_0_0_3px_rgba(12,62,120,0.1)] transition-all"
                 />
                 {filters.search && (
                     <button
                         type="button"
                         onClick={() => onChange({ ...filters, search: '' })}
                         aria-label="Clear search"
-                        style={{
-                            position: 'absolute',
-                            right: '10px',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            color: 'var(--text-muted)',
-                            padding: '2px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-slate-400 p-0.5 flex items-center justify-center hover:text-slate-600 transition-colors"
                     >
                         <X size={14} />
                     </button>
@@ -113,57 +63,33 @@ export function TaskFiltersBar({ filters, onChange }: TaskFiltersProps) {
             </div>
 
             {/* Priority Filters */}
-            <div
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    flexWrap: 'wrap',
-                    maxWidth: '100%',
-                }}
-            >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginRight: '4px', color: 'var(--text-secondary)', fontSize: '12px', fontWeight: 600 }}>
-                    <Filter size={13} style={{ color: '#0c3e78' }} />
+            <div className="flex items-center gap-1.5 flex-wrap max-w-full">
+                <div className="flex items-center gap-1 mr-1 text-slate-600 text-xs font-semibold">
+                    <Filter size={13} className="text-brand" />
                     <span>Priority:</span>
                 </div>
                 <button
                     id="filter-priority-all"
                     onClick={() => handlePriority(undefined)}
-                    style={{
-                        padding: '5px 12px',
-                        borderRadius: '20px',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        background: !filters.priority ? '#0c3e78' : '#ffffff',
-                        border: `1px solid ${!filters.priority ? '#0c3e78' : 'var(--border)'}`,
-                        color: !filters.priority ? '#ffffff' : 'var(--text-secondary)',
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
-                        transition: 'all 0.15s ease',
-                    }}
+                    className={`px-3 py-[5px] rounded-full text-xs font-semibold cursor-pointer border shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-all ${
+                        !filters.priority
+                            ? 'bg-brand border-brand text-white'
+                            : 'bg-white border-slate-200 text-slate-600 hover:border-brand hover:text-brand'
+                    }`}
                 >
                     All
                 </button>
                 {TASK_PRIORITY.map(({ value, label }) => {
                     const isSelected = filters.priority === value;
-                    const config = PRIORITY_COLORS[value as TaskPriority];
+                    const styles = PRIORITY_STYLES[value as TaskPriority];
                     return (
                         <button
                             key={value}
                             id={`filter-priority-${value.toLowerCase()}`}
                             onClick={() => handlePriority(isSelected ? undefined : (value as TaskPriority))}
-                            style={{
-                                padding: '5px 12px',
-                                borderRadius: '20px',
-                                fontSize: '12px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                background: isSelected ? config.bg : '#ffffff',
-                                border: `1px solid ${isSelected ? config.border : 'var(--border)'}`,
-                                color: isSelected ? config.color : 'var(--text-secondary)',
-                                boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
-                                transition: 'all 0.15s ease',
-                            }}
+                            className={`px-3 py-[5px] rounded-full text-xs font-semibold cursor-pointer border shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-all ${
+                                isSelected ? styles.active : styles.inactive + ' hover:border-slate-300'
+                            }`}
                         >
                             {label}
                         </button>

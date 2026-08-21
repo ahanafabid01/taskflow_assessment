@@ -65,98 +65,52 @@ export function RegisterForm() {
                 <div className="auth-hero-glow" />
 
                 {/* Brand Logo & Suite Tagline */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 2 }}>
-                    <div
-                        style={{
-                            width: '42px',
-                            height: '42px',
-                            borderRadius: '10px',
-                            background: 'rgba(255, 255, 255, 0.08)',
-                            border: '1px solid rgba(255, 255, 255, 0.18)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35)',
-                            backdropFilter: 'blur(8px)',
-                            flexShrink: 0,
-                        }}
-                    >
+                <div className="flex items-center gap-3 z-[2]">
+                    <div className="w-[42px] h-[42px] rounded-[10px] bg-white/[0.08] border border-white/[0.18] flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-sm shrink-0">
                         <Image src="/brand/icon.svg" alt="TaskFlow" width={26} height={26} priority />
                     </div>
                     <div>
-                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
-                            <span style={{ fontSize: '22px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.03em', fontFamily: 'Outfit, sans-serif' }}>
-                                Task<span style={{ color: '#38bdf8' }}>Flow</span>
+                        <div className="flex items-baseline gap-0.5">
+                            <span className="text-[22px] font-extrabold text-white tracking-[-0.03em] font-brand">
+                                Task<span className="text-sky-300">Flow</span>
                             </span>
                         </div>
-                        <span style={{ display: 'block', fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', color: 'rgba(255, 255, 255, 0.65)', textTransform: 'uppercase' }}>
+                        <span className="block text-[10px] font-bold tracking-[0.12em] text-white/65 uppercase">
                             ENTERPRISE SUITE
                         </span>
                     </div>
                 </div>
 
                 {/* Hero Headline & Description */}
-                <div style={{ zIndex: 2, margin: 'auto 0', padding: '40px 0' }}>
-                    <h2
-                        style={{
-                            fontSize: 'clamp(26px, 3vw, 36px)',
-                            fontWeight: 800,
-                            color: '#ffffff',
-                            lineHeight: 1.25,
-                            letterSpacing: '-0.025em',
-                            marginBottom: '16px',
-                        }}
-                    >
+                <div className="z-[2] my-auto py-10">
+                    <h2 className="text-[clamp(26px,3vw,36px)] font-extrabold text-white leading-tight tracking-[-0.025em] mb-4">
                         Collaborative Task &<br />Project Management
                     </h2>
-                    <p
-                        style={{
-                            fontSize: '14.5px',
-                            lineHeight: 1.6,
-                            color: 'rgba(255, 255, 255, 0.75)',
-                            maxWidth: '380px',
-                            margin: 0,
-                        }}
-                    >
+                    <p className="text-[14.5px] leading-relaxed text-white/75 max-w-[380px] m-0">
                         Streamline operations, track tasks in real time, and empower your team with our comprehensive Kanban platform.
                     </p>
                 </div>
 
-                {/* Left Footer subtle copy */}
-                <div style={{ zIndex: 2 }}>
-                    <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)' }}>
-                        © TaskFlow Inc. All rights reserved.
-                    </span>
+                {/* Left Footer */}
+                <div className="z-[2]">
+                    <span className="text-xs text-white/45">© TaskFlow Inc. All rights reserved.</span>
                 </div>
             </aside>
 
             {/* Right Form Container */}
             <main className="auth-form-container">
                 <div className="auth-form-card">
-                    {/* Mobile Brand Header — Only visible on mobile/tablet */}
+                    {/* Mobile Brand Header */}
                     <div className="auth-mobile-logo">
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', margin: '0 auto' }}>
-                            <div
-                                style={{
-                                    width: '42px',
-                                    height: '42px',
-                                    borderRadius: '10px',
-                                    background: '#0f294a',
-                                    border: '1px solid rgba(13, 71, 161, 0.3)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    boxShadow: '0 6px 16px rgba(15, 41, 74, 0.2)',
-                                    flexShrink: 0,
-                                }}
-                            >
+                        <div className="flex items-center justify-center gap-3 mx-auto">
+                            <div className="w-[42px] h-[42px] rounded-[10px] bg-navy border border-blue-800/30 flex items-center justify-center shadow-[0_6px_16px_rgba(15,41,74,0.2)] shrink-0">
                                 <Image src="/brand/icon.svg" alt="TaskFlow" width={26} height={26} priority />
                             </div>
-                            <div style={{ textAlign: 'left' }}>
-                                <div style={{ fontSize: '22px', fontWeight: 800, color: '#0f294a', letterSpacing: '-0.02em', fontFamily: 'Outfit, sans-serif', lineHeight: 1.1 }}>
-                                    Task<span style={{ color: '#0c3e78' }}>Flow</span>
+                            <div className="text-left">
+                                <div className="text-[22px] font-extrabold text-navy tracking-[-0.02em] font-brand leading-[1.1]">
+                                    Task<span className="text-brand">Flow</span>
                                 </div>
-                                <span style={{ display: 'block', fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.12em', color: '#64748b', textTransform: 'uppercase', marginTop: '2px' }}>
+                                <span className="block text-[9.5px] font-bold tracking-[0.12em] text-slate-500 uppercase mt-0.5">
                                     TASK SUITE
                                 </span>
                             </div>
@@ -164,72 +118,36 @@ export function RegisterForm() {
                     </div>
 
                     {/* Title & Subtitle */}
-                    <div style={{ marginBottom: '24px' }}>
-                        <h1
-                            style={{
-                                fontSize: '26px',
-                                fontWeight: 700,
-                                color: '#0f172a',
-                                letterSpacing: '-0.025em',
-                                marginBottom: '6px',
-                            }}
-                        >
+                    <div className="mb-6">
+                        <h1 className="text-[26px] font-bold text-slate-900 tracking-[-0.025em] mb-1.5">
                             Create an account
                         </h1>
-                        <p style={{ color: '#64748b', fontSize: '13.5px', margin: 0 }}>
+                        <p className="text-slate-500 text-[13.5px] m-0">
                             Start collaborating with your team on TaskFlow
                         </p>
                     </div>
 
                     {/* General Error Banner */}
                     {errors.general && (
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                background: '#fef2f2',
-                                border: '1px solid #fecaca',
-                                borderRadius: '8px',
-                                padding: '10px 14px',
-                                marginBottom: '20px',
-                                color: '#b91c1c',
-                                fontSize: '13px',
-                            }}
-                        >
-                            <AlertCircle size={16} style={{ flexShrink: 0 }} />
+                        <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg px-3.5 py-2.5 mb-5 text-red-700 text-[13px]">
+                            <AlertCircle size={16} className="shrink-0" />
                             <span>{errors.general}</span>
                         </div>
                     )}
 
                     <form onSubmit={handleSubmit} noValidate>
                         {/* Name Field */}
-                        <div style={{ marginBottom: '16px' }}>
+                        <div className="mb-4">
                             <label
                                 htmlFor="register-name"
-                                style={{
-                                    display: 'block',
-                                    fontSize: '11px',
-                                    fontWeight: 700,
-                                    letterSpacing: '0.06em',
-                                    color: '#475467',
-                                    textTransform: 'uppercase',
-                                    marginBottom: '6px',
-                                }}
+                                className="block text-[11px] font-bold tracking-[0.06em] text-slate-600 uppercase mb-1.5"
                             >
                                 FULL NAME
                             </label>
-                            <div style={{ position: 'relative' }}>
+                            <div className="relative">
                                 <UserIcon
                                     size={16}
-                                    style={{
-                                        position: 'absolute',
-                                        left: '14px',
-                                        top: '50%',
-                                        transform: 'translateY(-50%)',
-                                        color: '#94a3b8',
-                                        pointerEvents: 'none',
-                                    }}
+                                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
                                 />
                                 <input
                                     id="register-name"
@@ -238,46 +156,26 @@ export function RegisterForm() {
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="Jane Doe"
                                     autoComplete="name"
-                                    className="auth-input"
-                                    style={{
-                                        borderColor: errors.name ? '#ef4444' : '#cbd5e1',
-                                    }}
+                                    className={`auth-input ${errors.name ? 'border-red-400' : ''}`}
                                 />
                             </div>
                             {errors.name && (
-                                <p style={{ color: '#ef4444', fontSize: '12px', marginTop: '5px', marginInlineStart: '2px' }}>
-                                    {errors.name}
-                                </p>
+                                <p className="text-red-500 text-xs mt-1.5 ml-0.5">{errors.name}</p>
                             )}
                         </div>
 
                         {/* Email Field */}
-                        <div style={{ marginBottom: '16px' }}>
+                        <div className="mb-4">
                             <label
                                 htmlFor="register-email"
-                                style={{
-                                    display: 'block',
-                                    fontSize: '11px',
-                                    fontWeight: 700,
-                                    letterSpacing: '0.06em',
-                                    color: '#475467',
-                                    textTransform: 'uppercase',
-                                    marginBottom: '6px',
-                                }}
+                                className="block text-[11px] font-bold tracking-[0.06em] text-slate-600 uppercase mb-1.5"
                             >
                                 EMAIL ADDRESS
                             </label>
-                            <div style={{ position: 'relative' }}>
+                            <div className="relative">
                                 <Mail
                                     size={16}
-                                    style={{
-                                        position: 'absolute',
-                                        left: '14px',
-                                        top: '50%',
-                                        transform: 'translateY(-50%)',
-                                        color: '#94a3b8',
-                                        pointerEvents: 'none',
-                                    }}
+                                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
                                 />
                                 <input
                                     id="register-email"
@@ -286,46 +184,26 @@ export function RegisterForm() {
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="you@company.com"
                                     autoComplete="email"
-                                    className="auth-input"
-                                    style={{
-                                        borderColor: errors.email ? '#ef4444' : '#cbd5e1',
-                                    }}
+                                    className={`auth-input ${errors.email ? 'border-red-400' : ''}`}
                                 />
                             </div>
                             {errors.email && (
-                                <p style={{ color: '#ef4444', fontSize: '12px', marginTop: '5px', marginInlineStart: '2px' }}>
-                                    {errors.email}
-                                </p>
+                                <p className="text-red-500 text-xs mt-1.5 ml-0.5">{errors.email}</p>
                             )}
                         </div>
 
                         {/* Password Field */}
-                        <div style={{ marginBottom: '20px' }}>
+                        <div className="mb-5">
                             <label
                                 htmlFor="register-password"
-                                style={{
-                                    display: 'block',
-                                    fontSize: '11px',
-                                    fontWeight: 700,
-                                    letterSpacing: '0.06em',
-                                    color: '#475467',
-                                    textTransform: 'uppercase',
-                                    marginBottom: '6px',
-                                }}
+                                className="block text-[11px] font-bold tracking-[0.06em] text-slate-600 uppercase mb-1.5"
                             >
                                 PASSWORD
                             </label>
-                            <div style={{ position: 'relative' }}>
+                            <div className="relative">
                                 <Lock
                                     size={16}
-                                    style={{
-                                        position: 'absolute',
-                                        left: '14px',
-                                        top: '50%',
-                                        transform: 'translateY(-50%)',
-                                        color: '#94a3b8',
-                                        pointerEvents: 'none',
-                                    }}
+                                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
                                 />
                                 <input
                                     id="register-password"
@@ -334,42 +212,23 @@ export function RegisterForm() {
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Min. 8 characters"
                                     autoComplete="new-password"
-                                    className="auth-input"
-                                    style={{
-                                        borderColor: errors.password ? '#ef4444' : '#cbd5e1',
-                                        paddingRight: '40px',
-                                    }}
+                                    className={`auth-input pr-10 ${errors.password ? 'border-red-400' : ''}`}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
                                     aria-label={showPassword ? 'Hide password' : 'Show password'}
-                                    style={{
-                                        position: 'absolute',
-                                        right: '12px',
-                                        top: '50%',
-                                        transform: 'translateY(-50%)',
-                                        background: 'none',
-                                        border: 'none',
-                                        padding: '4px',
-                                        cursor: 'pointer',
-                                        color: '#94a3b8',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none p-1 cursor-pointer text-slate-400 flex items-center justify-center"
                                 >
                                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                                 </button>
                             </div>
                             {errors.password && (
-                                <p style={{ color: '#ef4444', fontSize: '12px', marginTop: '5px', marginInlineStart: '2px' }}>
-                                    {errors.password}
-                                </p>
+                                <p className="text-red-500 text-xs mt-1.5 ml-0.5">{errors.password}</p>
                             )}
                         </div>
 
-                        {/* Register Primary Button */}
+                        {/* Register Button */}
                         <button
                             id="register-submit"
                             type="submit"
@@ -388,28 +247,21 @@ export function RegisterForm() {
                     </div>
 
                     {/* Login Redirect */}
-                    <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                        <p style={{ fontSize: '13px', color: '#475467', margin: 0 }}>
+                    <div className="text-center mb-6">
+                        <p className="text-[13px] text-slate-600 m-0">
                             Already have an account?{' '}
-                            <Link
-                                href="/login"
-                                style={{
-                                    color: '#0c3e78',
-                                    fontWeight: 700,
-                                    textDecoration: 'none',
-                                }}
-                            >
+                            <Link href="/login" className="text-brand font-bold no-underline">
                                 Sign in
                             </Link>
                         </p>
                     </div>
 
                     {/* Footer Legal Terms */}
-                    <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '18px', textAlign: 'center' }}>
-                        <p style={{ fontSize: '11px', color: '#94a3b8', margin: 0, lineHeight: 1.5 }}>
+                    <div className="border-t border-slate-100 pt-[18px] text-center">
+                        <p className="text-[11px] text-slate-400 m-0 leading-relaxed">
                             By signing up, you agree to our{' '}
-                            <span style={{ color: '#475467', fontWeight: 600, cursor: 'pointer' }}>Terms</span> and{' '}
-                            <span style={{ color: '#475467', fontWeight: 600, cursor: 'pointer' }}>Privacy Policy</span>
+                            <span className="text-slate-600 font-semibold cursor-pointer">Terms</span> and{' '}
+                            <span className="text-slate-600 font-semibold cursor-pointer">Privacy Policy</span>
                         </p>
                     </div>
                 </div>

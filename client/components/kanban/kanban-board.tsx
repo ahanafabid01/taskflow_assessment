@@ -49,7 +49,7 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
     const [filters, setFilters] = useState<TaskFilters>({});
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
     const [activeTask, setActiveTask] = useState<Task | null>(null);
-    const [modalTask, setModalTask] = useState<Task | null | undefined>(undefined); // undefined = closed, null = create
+    const [modalTask, setModalTask] = useState<Task | null | undefined>(undefined);
     const [defaultStatus, setDefaultStatus] = useState<TaskStatus>('TODO');
     const debouncedSearch = useDebouncedValue(filters.search ?? '', 300);
     const queryFilters = useMemo(
@@ -62,20 +62,10 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
     const updateTask = useUpdateTask(projectId);
     const deleteTask = useDeleteTask(projectId);
 
-
     const sensors = useSensors(
-        useSensor(MouseSensor, {
-            activationConstraint: { distance: 5 },
-        }),
-        useSensor(TouchSensor, {
-            activationConstraint: {
-                delay: 200,
-                tolerance: 6,
-            },
-        }),
-        useSensor(PointerSensor, {
-            activationConstraint: { distance: 6 },
-        })
+        useSensor(MouseSensor, { activationConstraint: { distance: 5 } }),
+        useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 6 } }),
+        useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     );
 
     const tasksByStatus = useMemo(() => {
@@ -138,7 +128,7 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
 
     if (isLoading) {
         return (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px', color: 'var(--text-secondary)' }}>
+            <div className="flex items-center justify-center h-[300px] text-slate-600">
                 Loading board…
             </div>
         );
@@ -146,7 +136,7 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
 
     if (error) {
         return (
-            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '10px', padding: '16px', color: 'var(--accent-red)', fontSize: '14px' }}>
+            <div className="bg-red-50 border border-red-200 rounded-[10px] p-4 text-red-600 text-sm">
                 Failed to load tasks. Please refresh.
             </div>
         );
@@ -156,92 +146,35 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
     const displayDescription = project?.description;
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', boxSizing: 'border-box' }}>
-            {/* Project Header Card: Title, Badge & Clamped Description */}
-            <div
-                style={{
-                    marginBottom: '20px',
-                    background: 'var(--bg-card)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 'var(--radius-lg)',
-                    padding: '16px 20px',
-                    boxShadow: 'var(--shadow-card)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px',
-                }}
-            >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-                        <div
-                            style={{
-                                width: '38px',
-                                height: '38px',
-                                borderRadius: '10px',
-                                background: 'rgba(12, 62, 120, 0.08)',
-                                border: '1px solid rgba(12, 62, 120, 0.15)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#0c3e78',
-                                flexShrink: 0,
-                            }}
-                        >
+        <div className="flex flex-col w-full box-border">
+            {/* Project Header Card */}
+            <div className="mb-5 bg-white border border-slate-200 rounded-[14px] px-5 py-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] flex flex-col gap-2.5">
+                <div className="flex items-center justify-between flex-wrap gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-[38px] h-[38px] rounded-[10px] bg-brand/[0.08] border border-brand/[0.15] flex items-center justify-center text-brand shrink-0">
                             <Folder size={18} />
                         </div>
-                        <h1
-                            style={{
-                                fontSize: 'clamp(18px, 2.5vw, 24px)',
-                                fontWeight: 700,
-                                color: 'var(--text-primary)',
-                                letterSpacing: '-0.02em',
-                                lineHeight: 1.25,
-                                margin: 0,
-                                wordBreak: 'break-word',
-                            }}
-                        >
+                        <h1 className="text-[clamp(18px,2.5vw,24px)] font-bold text-slate-900 tracking-[-0.02em] leading-tight m-0 break-words">
                             {displayTitle}
                         </h1>
                     </div>
 
                     {/* Task Counter Badge */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                        <span
-                            style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                fontSize: '12px',
-                                fontWeight: 600,
-                                color: 'var(--text-secondary)',
-                                background: 'var(--bg-elevated)',
-                                padding: '4px 10px',
-                                borderRadius: '20px',
-                                border: '1px solid var(--border)',
-                            }}
-                        >
-                            <Layers size={13} style={{ color: '#0c3e78' }} />
+                    <div className="flex items-center gap-2 shrink-0">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200">
+                            <Layers size={13} className="text-brand" />
                             {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'}
                         </span>
                     </div>
                 </div>
 
-                {/* Project Description (Clamped with Show More toggle) */}
+                {/* Project Description */}
                 {displayDescription && (
-                    <div style={{ paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
+                    <div className="pt-2 border-t border-slate-100">
                         <p
-                            style={{
-                                fontSize: '13.5px',
-                                color: 'var(--text-secondary)',
-                                lineHeight: 1.55,
-                                margin: 0,
-                                display: isDescriptionExpanded ? 'block' : '-webkit-box',
-                                WebkitLineClamp: isDescriptionExpanded ? undefined : 2,
-                                WebkitBoxOrient: 'vertical',
-                                overflow: isDescriptionExpanded ? 'visible' : 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'pre-wrap',
-                            }}
+                            className={`text-[13.5px] text-slate-600 leading-[1.55] m-0 whitespace-pre-wrap ${
+                                isDescriptionExpanded ? '' : 'overflow-hidden text-ellipsis line-clamp-2'
+                            }`}
                         >
                             {displayDescription}
                         </p>
@@ -249,27 +182,12 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
                             <button
                                 type="button"
                                 onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-                                style={{
-                                    background: 'transparent',
-                                    border: 'none',
-                                    color: '#0c3e78',
-                                    fontSize: '12px',
-                                    fontWeight: 600,
-                                    cursor: 'pointer',
-                                    padding: '6px 0 0',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '4px',
-                                }}
+                                className="bg-transparent border-none text-brand text-xs font-semibold cursor-pointer pt-1.5 pb-0 px-0 inline-flex items-center gap-1 hover:opacity-80 transition-opacity"
                             >
                                 {isDescriptionExpanded ? (
-                                    <>
-                                        Show less <ChevronUp size={13} />
-                                    </>
+                                    <>Show less <ChevronUp size={13} /></>
                                 ) : (
-                                    <>
-                                        Show more <ChevronDown size={13} />
-                                    </>
+                                    <>Show more <ChevronDown size={13} /></>
                                 )}
                             </button>
                         )}
@@ -277,12 +195,12 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
                 )}
             </div>
 
-            {/* Search and Filters Bar */}
-            <div style={{ marginBottom: '20px', width: '100%' }}>
+            {/* Filters Bar */}
+            <div className="mb-5 w-full">
                 <TaskFiltersBar filters={filters} onChange={setFilters} />
             </div>
 
-            {/* Kanban Board Container */}
+            {/* Kanban Board */}
             <div className="kanban-board-wrapper">
                 <DndContext sensors={sensors} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
                     <div className="kanban-board">
@@ -314,7 +232,7 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
                 </DndContext>
             </div>
 
-            {/* Centered Modal */}
+            {/* Task Modal */}
             {modalTask !== undefined && (
                 <TaskModal
                     task={modalTask}

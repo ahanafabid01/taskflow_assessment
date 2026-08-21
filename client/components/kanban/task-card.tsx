@@ -9,10 +9,10 @@ import { CSS } from '@dnd-kit/utilities';
 import { MoreHorizontal, Pencil, Trash2, Calendar } from 'lucide-react';
 import type { Task, TaskPriority } from '@/types';
 
-const PRIORITY_CONFIG: Record<TaskPriority, { color: string; bg: string; border: string; label: string }> = {
-    LOW: { color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0', label: 'Low' },
-    MEDIUM: { color: '#d97706', bg: '#fffbeb', border: '#fde68a', label: 'Medium' },
-    HIGH: { color: '#dc2626', bg: '#fef2f2', border: '#fecaca', label: 'High' },
+const PRIORITY_CONFIG: Record<TaskPriority, { pill: string; label: string }> = {
+    LOW:    { pill: 'text-green-600 bg-green-50 border border-green-200',  label: 'Low' },
+    MEDIUM: { pill: 'text-amber-600 bg-amber-50 border border-amber-200',  label: 'Medium' },
+    HIGH:   { pill: 'text-red-600   bg-red-50   border border-red-200',    label: 'High' },
 };
 
 interface TaskCardProps {
@@ -28,7 +28,7 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
         attributes, listeners, setNodeRef, transform, transition, isDragging,
     } = useSortable({ id: task.id });
 
-    const style = {
+    const dndStyle = {
         transform: CSS.Transform.toString(transform),
         transition,
         opacity: isDragging ? 0.35 : 1,
@@ -39,52 +39,23 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
     return (
         <div
             ref={setNodeRef}
-            style={{
-                ...style,
-                background: '#ffffff',
-                border: `1px solid ${isDragOverlay ? '#0c3e78' : 'var(--border)'}`,
-                borderRadius: '10px',
-                padding: '14px',
-                cursor: isDragOverlay ? 'grabbing' : 'grab',
-                boxShadow: isDragOverlay ? '0 12px 30px rgba(12, 62, 120, 0.2)' : '0 1px 3px rgba(0,0,0,0.04)',
-                position: 'relative',
-                userSelect: 'none',
-                touchAction: 'none',
-                transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
-            }}
-            onMouseEnter={(e) => {
-                if (!isDragOverlay) {
-                    (e.currentTarget as HTMLElement).style.borderColor = '#0c3e78';
-                    (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(12, 62, 120, 0.08)';
-                }
-            }}
-            onMouseLeave={(e) => {
-                if (!isDragOverlay) {
-                    (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
-                    (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)';
-                }
-            }}
+            style={dndStyle}
+            className={`bg-white rounded-[10px] p-3.5 relative select-none touch-none transition-[border-color,box-shadow] ${
+                isDragOverlay
+                    ? 'border border-brand shadow-[0_12px_30px_rgba(12,62,120,0.2)] cursor-grabbing'
+                    : 'border border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.04)] cursor-grab hover:border-brand hover:shadow-[0_4px_12px_rgba(12,62,120,0.08)]'
+            }`}
             {...attributes}
             {...listeners}
         >
             {/* Top row: Priority badge + options menu */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span
-                    style={{
-                        fontSize: '11px',
-                        fontWeight: 700,
-                        color: priority.color,
-                        background: priority.bg,
-                        border: `1px solid ${priority.border}`,
-                        padding: '2px 8px',
-                        borderRadius: '20px',
-                    }}
-                >
+            <div className="flex items-center justify-between mb-2">
+                <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${priority.pill}`}>
                     {priority.label}
                 </span>
 
                 {/* Action menu */}
-                <div style={{ position: 'relative' }}>
+                <div className="relative">
                     <button
                         data-no-dnd
                         onPointerDown={(e) => e.stopPropagation()}
@@ -93,20 +64,7 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
                             setShowMenu(!showMenu);
                         }}
                         aria-label="Task options"
-                        style={{
-                            width: '26px',
-                            height: '26px',
-                            borderRadius: '6px',
-                            background: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'var(--text-muted)',
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-elevated)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                        className="w-[26px] h-[26px] rounded-md bg-transparent border-none cursor-pointer flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors"
                     >
                         <MoreHorizontal size={16} />
                     </button>
@@ -114,26 +72,13 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
                     {showMenu && (
                         <>
                             <div
-                                style={{ position: 'fixed', inset: 0, zIndex: 40 }}
+                                className="fixed inset-0 z-40"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setShowMenu(false);
                                 }}
                             />
-                            <div
-                                style={{
-                                    position: 'absolute',
-                                    top: '100%',
-                                    right: 0,
-                                    zIndex: 50,
-                                    background: '#ffffff',
-                                    border: '1px solid var(--border)',
-                                    borderRadius: '8px',
-                                    minWidth: '130px',
-                                    overflow: 'hidden',
-                                    boxShadow: '0 8px 24px rgba(15, 23, 42, 0.12)',
-                                }}
-                            >
+                            <div className="absolute top-full right-0 z-50 bg-white border border-slate-200 rounded-lg min-w-[130px] overflow-hidden shadow-[0_8px_24px_rgba(15,23,42,0.12)]">
                                 <button
                                     onPointerDown={(e) => e.stopPropagation()}
                                     onClick={(e) => {
@@ -141,24 +86,9 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
                                         setShowMenu(false);
                                         onEdit(task);
                                     }}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '8px',
-                                        width: '100%',
-                                        textAlign: 'left',
-                                        padding: '9px 12px',
-                                        background: 'none',
-                                        border: 'none',
-                                        color: 'var(--text-primary)',
-                                        fontSize: '13px',
-                                        fontWeight: 500,
-                                        cursor: 'pointer',
-                                    }}
-                                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-elevated)')}
-                                    onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
+                                    className="flex items-center gap-2 w-full text-left px-3 py-2.5 bg-transparent border-none text-slate-900 text-[13px] font-medium cursor-pointer hover:bg-slate-100 transition-colors"
                                 >
-                                    <Pencil size={13} style={{ color: '#0c3e78' }} />
+                                    <Pencil size={13} className="text-brand" />
                                     Edit
                                 </button>
                                 <button
@@ -168,22 +98,7 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
                                         setShowMenu(false);
                                         onDelete(task.id);
                                     }}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '8px',
-                                        width: '100%',
-                                        textAlign: 'left',
-                                        padding: '9px 12px',
-                                        background: 'none',
-                                        border: 'none',
-                                        color: 'var(--accent-red)',
-                                        fontSize: '13px',
-                                        fontWeight: 500,
-                                        cursor: 'pointer',
-                                    }}
-                                    onMouseEnter={(e) => (e.currentTarget.style.background = '#fef2f2')}
-                                    onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
+                                    className="flex items-center gap-2 w-full text-left px-3 py-2.5 bg-transparent border-none text-red-600 text-[13px] font-medium cursor-pointer hover:bg-red-50 transition-colors"
                                 >
                                     <Trash2 size={13} />
                                     Delete
@@ -195,75 +110,30 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
             </div>
 
             {/* Task Title */}
-            <p
-                style={{
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    color: 'var(--text-primary)',
-                    lineHeight: 1.4,
-                    marginBottom: task.description ? '6px' : '0',
-                    wordBreak: 'break-word',
-                }}
-            >
+            <p className={`text-sm font-medium text-slate-900 leading-snug break-words ${task.description ? 'mb-1.5' : 'mb-0'}`}>
                 {task.title}
             </p>
 
             {/* Task Description */}
             {task.description && (
-                <p
-                    style={{
-                        fontSize: '12px',
-                        color: 'var(--text-secondary)',
-                        lineHeight: 1.4,
-                        marginBottom: '10px',
-                        overflow: 'hidden',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical' as const,
-                        wordBreak: 'break-word',
-                    }}
-                >
+                <p className="text-xs text-slate-600 leading-snug mb-2.5 overflow-hidden break-words line-clamp-2">
                     {task.description}
                 </p>
             )}
 
             {/* Footer Info */}
             {(task.assignee || task.dueDate) && (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        marginTop: '10px',
-                        paddingTop: '10px',
-                        borderTop: '1px solid var(--border-subtle)',
-                        flexWrap: 'wrap',
-                        gap: '6px',
-                    }}
-                >
+                <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-slate-100 flex-wrap gap-1.5">
                     {task.assignee && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <div
-                                style={{
-                                    width: '20px',
-                                    height: '20px',
-                                    borderRadius: '50%',
-                                    background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '9px',
-                                    fontWeight: 700,
-                                    color: 'white',
-                                }}
-                            >
+                        <div className="flex items-center gap-1.5">
+                            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-brand to-sky-500 flex items-center justify-center text-[9px] font-bold text-white">
                                 {task.assignee.name.charAt(0).toUpperCase()}
                             </div>
-                            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{task.assignee.name}</span>
+                            <span className="text-[11px] text-slate-400">{task.assignee.name}</span>
                         </div>
                     )}
                     {task.dueDate && (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'var(--text-muted)', marginLeft: 'auto' }}>
+                        <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 ml-auto">
                             <Calendar size={12} />
                             {new Date(task.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </span>

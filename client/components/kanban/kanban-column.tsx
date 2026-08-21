@@ -11,11 +11,11 @@ import type { Task, TaskStatus } from '@/types';
 
 const COLUMN_CONFIG: Record<
     TaskStatus,
-    { label: string; color: string; badgeBg: string; icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }> }
+    { label: string; color: string; badgeBg: string; badgeText: string; icon: React.ComponentType<{ size?: number; className?: string }> }
 > = {
-    TODO: { label: 'To Do', color: '#475467', badgeBg: '#e2e8f0', icon: CircleDot },
-    IN_PROGRESS: { label: 'In Progress', color: '#0c3e78', badgeBg: 'rgba(12, 62, 120, 0.1)', icon: Clock },
-    DONE: { label: 'Done', color: '#16a34a', badgeBg: 'rgba(22, 163, 74, 0.1)', icon: CheckCircle2 },
+    TODO: { label: 'To Do', color: 'text-slate-600', badgeBg: 'bg-slate-200', badgeText: 'text-slate-600', icon: CircleDot },
+    IN_PROGRESS: { label: 'In Progress', color: 'text-brand', badgeBg: 'bg-brand/10', badgeText: 'text-brand', icon: Clock },
+    DONE: { label: 'Done', color: 'text-green-600', badgeBg: 'bg-green-600/10', badgeText: 'text-green-600', icon: CheckCircle2 },
 };
 
 interface KanbanColumnProps {
@@ -34,63 +34,28 @@ export function KanbanColumn({ status, tasks, onEditTask, onDeleteTask, onAddTas
     return (
         <div
             ref={setNodeRef}
-            className="kanban-col"
-            style={{
-                background: isOver ? 'rgba(12, 62, 120, 0.04)' : '#f1f5f9',
-                border: `1px solid ${isOver ? '#0c3e78' : 'var(--border)'}`,
-                borderRadius: 'var(--radius-lg)',
-                display: 'flex',
-                flexDirection: 'column',
-                transition: 'border-color 0.15s ease, background 0.15s ease',
-                minHeight: '440px',
-                maxHeight: 'calc(100vh - 210px)',
-            }}
+            className={`kanban-col flex flex-col rounded-[14px] border transition-all min-h-[440px] max-h-[calc(100vh-210px)] ${
+                isOver
+                    ? 'bg-brand/[0.04] border-brand'
+                    : 'bg-slate-100 border-slate-200'
+            }`}
         >
             {/* Column Header */}
-            <div style={{ padding: '14px 16px', borderBottom: '1px solid #e2e8f0' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <IconComponent size={16} style={{ color: config.color }} />
-                        <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>{config.label}</span>
+            <div className="px-4 py-3.5 border-b border-slate-200">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <IconComponent size={16} className={config.color} />
+                        <span className="text-sm font-bold text-slate-900">{config.label}</span>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                fontWeight: 700,
-                                color: config.color,
-                                background: config.badgeBg,
-                                padding: '2px 8px',
-                                borderRadius: '12px',
-                            }}
-                        >
+                    <div className="flex items-center gap-2">
+                        <span className={`text-xs font-bold ${config.badgeText} ${config.badgeBg} px-2 py-0.5 rounded-full`}>
                             {tasks.length}
                         </span>
                         <button
                             id={`add-task-${status.toLowerCase()}`}
                             onClick={onAddTask}
                             title={`Add task to ${config.label}`}
-                            style={{
-                                width: '26px',
-                                height: '26px',
-                                borderRadius: '6px',
-                                background: '#ffffff',
-                                border: '1px solid var(--border)',
-                                color: 'var(--text-secondary)',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
-                            }}
-                            onMouseEnter={(e) => {
-                                (e.currentTarget as HTMLElement).style.borderColor = '#0c3e78';
-                                (e.currentTarget as HTMLElement).style.color = '#0c3e78';
-                            }}
-                            onMouseLeave={(e) => {
-                                (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
-                                (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)';
-                            }}
+                            className="w-[26px] h-[26px] rounded-md bg-white border border-slate-200 text-slate-600 cursor-pointer flex items-center justify-center shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-brand hover:text-brand transition-all"
                         >
                             <Plus size={14} />
                         </button>
@@ -99,7 +64,7 @@ export function KanbanColumn({ status, tasks, onEditTask, onDeleteTask, onAddTas
             </div>
 
             {/* Task List */}
-            <div style={{ flex: 1, padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px', overflowY: 'auto' }}>
+            <div className="flex-1 p-3 flex flex-col gap-2.5 overflow-y-auto">
                 <SortableContext items={tasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>
                     {tasks.map((task) => (
                         <TaskCard
@@ -114,31 +79,10 @@ export function KanbanColumn({ status, tasks, onEditTask, onDeleteTask, onAddTas
                 {tasks.length === 0 && (
                     <div
                         onClick={onAddTask}
-                        style={{
-                            flex: 1,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            minHeight: '120px',
-                            border: '1px dashed #cbd5e1',
-                            borderRadius: 'var(--radius)',
-                            color: 'var(--text-muted)',
-                            cursor: 'pointer',
-                            transition: 'all 0.15s ease',
-                            background: '#ffffff',
-                        }}
-                        onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLElement).style.borderColor = '#0c3e78';
-                            (e.currentTarget as HTMLElement).style.color = '#0c3e78';
-                        }}
-                        onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLElement).style.borderColor = '#cbd5e1';
-                            (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)';
-                        }}
+                        className="flex-1 flex flex-col items-center justify-center min-h-[120px] border border-dashed border-slate-300 rounded-[10px] text-slate-400 cursor-pointer bg-white transition-all hover:border-brand hover:text-brand"
                     >
-                        <Plus size={18} style={{ marginBottom: '6px' }} />
-                        <span style={{ fontSize: '13px', fontWeight: 500 }}>Click to add a task</span>
+                        <Plus size={18} className="mb-1.5" />
+                        <span className="text-[13px] font-medium">Click to add a task</span>
                     </div>
                 )}
             </div>

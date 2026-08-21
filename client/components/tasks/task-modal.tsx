@@ -47,7 +47,6 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
 
     const selectedUser = users.find((u) => u.id === selectedId) ?? null;
 
-    // Filtered results
     const filtered = query.trim()
         ? users.filter((u) =>
             (u.name || '').toLowerCase().includes(query.toLowerCase()) ||
@@ -128,7 +127,6 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
         }
     }
 
-    // Close on outside click
     useEffect(() => {
         function handleOutsideClick(e: MouseEvent) {
             const target = e.target as Node;
@@ -152,85 +150,34 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
     }, [open, updatePosition]);
 
     function getInitials(name: string) {
-        return name
-            .split(' ')
-            .map((p) => p[0])
-            .join('')
-            .slice(0, 2)
-            .toUpperCase();
+        return name.split(' ').map((p) => p[0]).join('').slice(0, 2).toUpperCase();
     }
 
     return (
-        <div ref={containerRef} style={{ position: 'relative', width: '100%' }}>
+        <div ref={containerRef} className="relative w-full">
             {selectedUser && !open ? (
                 /* Selected Chip */
                 <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '8px 12px',
-                        background: '#ffffff',
-                        border: '1px solid #cbd5e1',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        minHeight: '44px',
-                        boxSizing: 'border-box',
-                    }}
+                    className="flex items-center justify-between px-3 py-2 bg-white border border-slate-300 rounded-lg cursor-pointer min-h-[44px] box-border"
                     onClick={handleOpen}
                 >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-                        <div
-                            style={{
-                                width: '24px',
-                                height: '24px',
-                                borderRadius: '50%',
-                                background: 'linear-gradient(135deg, #0c3e78, #1e40af)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '10px',
-                                fontWeight: 700,
-                                color: '#ffffff',
-                                flexShrink: 0,
-                            }}
-                        >
+                    <div className="flex items-center gap-2 min-w-0">
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-brand to-blue-700 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
                             {getInitials(selectedUser.name)}
                         </div>
-                        <span style={{ fontSize: '13.5px', color: 'var(--text-primary)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <span className="text-[13.5px] text-slate-900 font-medium overflow-hidden text-ellipsis whitespace-nowrap">
                             {selectedUser.name}
                         </span>
                         {selectedUser.id === currentUserId && (
-                            <span
-                                style={{
-                                    fontSize: '10px',
-                                    color: '#0c3e78',
-                                    background: 'rgba(12, 62, 120, 0.08)',
-                                    padding: '1px 6px',
-                                    borderRadius: '20px',
-                                    fontWeight: 600,
-                                }}
-                            >
+                            <span className="text-[10px] text-brand bg-brand/[0.08] px-1.5 py-px rounded-full font-semibold">
                                 You
                             </span>
                         )}
                     </div>
                     <button
                         type="button"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            clearSelection();
-                        }}
-                        style={{
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            color: 'var(--text-muted)',
-                            padding: '2px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
+                        onClick={(e) => { e.stopPropagation(); clearSelection(); }}
+                        className="bg-transparent border-none cursor-pointer text-slate-400 p-0.5 flex items-center justify-center hover:text-slate-600 transition-colors"
                         aria-label="Remove assignee"
                     >
                         <X size={14} />
@@ -238,17 +185,10 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                 </div>
             ) : (
                 /* Search Input */
-                <div style={{ position: 'relative', width: '100%' }}>
+                <div className="relative w-full">
                     <Search
                         size={14}
-                        style={{
-                            position: 'absolute',
-                            left: '12px',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            color: 'var(--text-muted)',
-                            pointerEvents: 'none',
-                        }}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
                     />
                     <input
                         ref={inputRef}
@@ -259,18 +199,9 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                         onKeyDown={handleKeyDown}
                         placeholder={isLoading ? 'Loading members…' : 'Search members…'}
                         disabled={isLoading}
-                        style={{
-                            width: '100%',
-                            padding: '10px 12px 10px 34px',
-                            background: '#ffffff',
-                            border: `1px solid ${open ? '#0c3e78' : '#cbd5e1'}`,
-                            borderRadius: '8px',
-                            color: 'var(--text-primary)',
-                            fontSize: '13.5px',
-                            outline: 'none',
-                            boxSizing: 'border-box',
-                            minHeight: '44px',
-                        }}
+                        className={`w-full py-2.5 px-3 pl-[34px] bg-white border rounded-lg text-slate-900 text-[13.5px] outline-none box-border min-h-[44px] transition-colors ${
+                            open ? 'border-brand' : 'border-slate-300'
+                        }`}
                     />
                 </div>
             )}
@@ -284,55 +215,22 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                         top: dropdownCoords.top,
                         left: dropdownCoords.left,
                         width: dropdownCoords.width,
-                        maxHeight: '220px',
-                        overflowY: 'auto',
-                        background: '#ffffff',
-                        border: '1px solid var(--border)',
-                        borderRadius: '10px',
-                        boxShadow: '0 12px 30px rgba(15, 23, 42, 0.15)',
-                        zIndex: 99999,
-                        margin: 0,
-                        padding: '6px',
-                        listStyle: 'none',
-                        boxSizing: 'border-box',
                     }}
+                    className="max-h-[220px] overflow-y-auto bg-white border border-slate-200 rounded-[10px] shadow-[0_12px_30px_rgba(15,23,42,0.15)] z-[99999] m-0 p-1.5 list-none box-border"
                 >
                     {/* Option 0: Unassigned */}
                     <li
-                        onMouseDown={(e) => {
-                            e.preventDefault();
-                            selectUnassigned();
-                        }}
+                        onMouseDown={(e) => { e.preventDefault(); selectUnassigned(); }}
                         onMouseEnter={() => setHighlighted(0)}
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '10px',
-                            padding: '8px 10px',
-                            borderRadius: '7px',
-                            cursor: 'pointer',
-                            background: highlighted === 0 ? '#f1f5f9' : 'transparent',
-                            transition: 'background 0.1s ease',
-                        }}
+                        className={`flex items-center gap-2.5 px-2.5 py-2 rounded-[7px] cursor-pointer transition-colors ${
+                            highlighted === 0 ? 'bg-slate-100' : 'bg-transparent'
+                        }`}
                     >
-                        <div
-                            style={{
-                                width: '26px',
-                                height: '26px',
-                                borderRadius: '50%',
-                                background: '#f1f5f9',
-                                border: '1px solid var(--border)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: 'var(--text-muted)',
-                                flexShrink: 0,
-                            }}
-                        >
+                        <div className="w-[26px] h-[26px] rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 shrink-0">
                             <UserIcon size={13} />
                         </div>
-                        <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Unassigned</span>
-                        {!selectedId && <Check size={14} style={{ marginLeft: 'auto', color: '#0c3e78' }} />}
+                        <span className="text-[13px] text-slate-600">Unassigned</span>
+                        {!selectedId && <Check size={14} className="ml-auto text-brand" />}
                     </li>
 
                     {/* Filtered User List */}
@@ -343,85 +241,30 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                         return (
                             <li
                                 key={u.id}
-                                onMouseDown={(e) => {
-                                    e.preventDefault();
-                                    selectUser(u);
-                                }}
+                                onMouseDown={(e) => { e.preventDefault(); selectUser(u); }}
                                 onMouseEnter={() => setHighlighted(i + 1)}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '10px',
-                                    padding: '8px 10px',
-                                    borderRadius: '7px',
-                                    cursor: 'pointer',
-                                    background: isItemHighlighted
-                                        ? '#f1f5f9'
+                                className={`flex items-center gap-2.5 px-2.5 py-2 rounded-[7px] cursor-pointer transition-colors ${
+                                    isItemHighlighted
+                                        ? 'bg-slate-100'
                                         : isItemSelected
-                                            ? 'rgba(12, 62, 120, 0.05)'
-                                            : 'transparent',
-                                    transition: 'background 0.1s ease',
-                                }}
+                                            ? 'bg-brand/[0.05]'
+                                            : 'bg-transparent'
+                                }`}
                             >
-                                {/* Avatar */}
-                                <div
-                                    style={{
-                                        width: '26px',
-                                        height: '26px',
-                                        borderRadius: '50%',
-                                        background: 'linear-gradient(135deg, #0c3e78, #1e40af)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        fontSize: '10px',
-                                        fontWeight: 700,
-                                        color: '#ffffff',
-                                        flexShrink: 0,
-                                    }}
-                                >
+                                <div className="w-[26px] h-[26px] rounded-full bg-gradient-to-br from-brand to-blue-700 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
                                     {getInitials(u.name)}
                                 </div>
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div
-                                        style={{
-                                            fontSize: '13px',
-                                            fontWeight: 600,
-                                            color: 'var(--text-primary)',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '6px',
-                                        }}
-                                    >
-                                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                            {u.name}
-                                        </span>
+                                <div className="flex-1 min-w-0">
+                                    <div className="text-[13px] font-semibold text-slate-900 flex items-center gap-1.5">
+                                        <span className="overflow-hidden text-ellipsis whitespace-nowrap">{u.name}</span>
                                         {u.id === currentUserId && (
-                                            <span
-                                                style={{
-                                                    fontSize: '10px',
-                                                    color: '#0c3e78',
-                                                    background: 'rgba(12, 62, 120, 0.08)',
-                                                    padding: '1px 6px',
-                                                    borderRadius: '20px',
-                                                    fontWeight: 600,
-                                                }}
-                                            >
+                                            <span className="text-[10px] text-brand bg-brand/[0.08] px-1.5 py-px rounded-full font-semibold">
                                                 You
                                             </span>
                                         )}
-                                        {isItemSelected && (
-                                            <Check size={14} style={{ marginLeft: 'auto', color: '#0c3e78' }} />
-                                        )}
+                                        {isItemSelected && <Check size={14} className="ml-auto text-brand" />}
                                     </div>
-                                    <div
-                                        style={{
-                                            fontSize: '11px',
-                                            color: 'var(--text-muted)',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap',
-                                        }}
-                                    >
+                                    <div className="text-[11px] text-slate-400 overflow-hidden text-ellipsis whitespace-nowrap">
                                         {u.email}
                                     </div>
                                 </div>
@@ -483,61 +326,39 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
         }
     }
 
-    const inputStyle: React.CSSProperties = {
-        width: '100%',
-        padding: '11px 13px',
-        background: '#ffffff',
-        border: '1px solid #cbd5e1',
-        borderRadius: '8px',
-        color: 'var(--text-primary)',
-        fontSize: '14px',
-        outline: 'none',
-        boxSizing: 'border-box',
-    };
-
-    const selectStyle: React.CSSProperties = {
-        ...inputStyle,
-        cursor: 'pointer',
-    };
+    const inputCls = 'w-full px-3.5 py-[11px] bg-white border border-slate-300 rounded-lg text-slate-900 text-sm outline-none box-border focus:border-brand transition-colors';
+    const selectCls = inputCls + ' cursor-pointer';
 
     return (
         <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
             <div className="modal-content animate-modal">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        {task ? <Pencil size={18} style={{ color: '#0c3e78' }} /> : <Plus size={18} style={{ color: '#0c3e78' }} />}
-                        <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                {/* Modal Header */}
+                <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center gap-2">
+                        {task ? <Pencil size={18} className="text-brand" /> : <Plus size={18} className="text-brand" />}
+                        <h2 className="text-[18px] font-bold text-slate-900">
                             {task ? 'Edit Task' : 'New Task'}
                         </h2>
                     </div>
                     <button
                         onClick={onClose}
                         aria-label="Close"
-                        style={{
-                            background: 'transparent',
-                            border: 'none',
-                            color: 'var(--text-muted)',
-                            cursor: 'pointer',
-                            padding: '4px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
+                        className="bg-transparent border-none text-slate-400 cursor-pointer p-1 flex items-center justify-center hover:text-slate-700 transition-colors"
                     >
                         <X size={18} />
                     </button>
                 </div>
 
                 {error && (
-                    <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '12px', marginBottom: '16px', color: 'var(--accent-red)', fontSize: '14px' }}>
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-red-600 text-sm">
                         {error}
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit}>
                     {/* Title */}
-                    <div style={{ marginBottom: '16px' }}>
-                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+                    <div className="mb-4">
+                        <label className="block text-[13px] font-semibold text-slate-900 mb-1.5">
                             Title *
                         </label>
                         <input
@@ -547,36 +368,44 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                             onChange={(e) => setTitle(e.target.value)}
                             autoFocus
                             placeholder="e.g. Implement user authentication flow"
-                            style={inputStyle}
-                            onFocus={(e) => (e.target.style.borderColor = '#0c3e78')}
-                            onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
+                            className={inputCls}
                         />
                     </div>
 
-                    {/* Metadata Section: Status & Priority */}
-                    <div className="form-grid-2" style={{ marginBottom: '14px' }}>
+                    {/* Status & Priority */}
+                    <div className="form-grid-2 mb-3.5">
                         <div>
-                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+                            <label className="block text-[13px] font-semibold text-slate-900 mb-1.5">
                                 Status
                             </label>
-                            <select id="task-status" value={status} onChange={(e) => setStatus(e.target.value as TaskStatus)} style={selectStyle}>
+                            <select
+                                id="task-status"
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value as TaskStatus)}
+                                className={selectCls}
+                            >
                                 {TASK_STATUS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                             </select>
                         </div>
                         <div>
-                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+                            <label className="block text-[13px] font-semibold text-slate-900 mb-1.5">
                                 Priority
                             </label>
-                            <select id="task-priority" value={priority} onChange={(e) => setPriority(e.target.value as TaskPriority)} style={selectStyle}>
+                            <select
+                                id="task-priority"
+                                value={priority}
+                                onChange={(e) => setPriority(e.target.value as TaskPriority)}
+                                className={selectCls}
+                            >
                                 {TASK_PRIORITY.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
                             </select>
                         </div>
                     </div>
 
-                    {/* Metadata Section: Assign To & Due date */}
-                    <div className="form-grid-2" style={{ marginBottom: '16px' }}>
+                    {/* Assign To & Due Date */}
+                    <div className="form-grid-2 mb-4">
                         <div>
-                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+                            <label className="block text-[13px] font-semibold text-slate-900 mb-1.5">
                                 Assign To
                             </label>
                             <AssigneeCombobox
@@ -589,8 +418,9 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                         </div>
 
                         <div>
-                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
-                                Due date <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional)</span>
+                            <label className="block text-[13px] font-semibold text-slate-900 mb-1.5">
+                                Due date{' '}
+                                <span className="text-slate-400 font-normal">(optional)</span>
                             </label>
                             <input
                                 id="task-due-date"
@@ -598,24 +428,19 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                                 value={dueDate}
                                 onChange={(e) => setDueDate(e.target.value)}
                                 onClick={(e) => {
-                                    try {
-                                        e.currentTarget.showPicker?.();
-                                    } catch { }
+                                    try { e.currentTarget.showPicker?.(); } catch { }
                                 }}
-                                style={{
-                                    ...selectStyle,
-                                    minHeight: '44px',
-                                    colorScheme: 'light',
-                                    cursor: 'pointer',
-                                }}
+                                className={selectCls + ' min-h-[44px]'}
+                                style={{ colorScheme: 'light' }}
                             />
                         </div>
                     </div>
 
                     {/* Description */}
-                    <div style={{ marginBottom: '22px' }}>
-                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
-                            Description <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional)</span>
+                    <div className="mb-[22px]">
+                        <label className="block text-[13px] font-semibold text-slate-900 mb-1.5">
+                            Description{' '}
+                            <span className="text-slate-400 font-normal">(optional)</span>
                         </label>
                         <textarea
                             id="task-description"
@@ -623,17 +448,27 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Details, subtasks, acceptance criteria..."
                             rows={3}
-                            style={{ ...inputStyle, resize: 'vertical', fontFamily: 'inherit' }}
-                            onFocus={(e) => (e.target.style.borderColor = '#0c3e78')}
-                            onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
+                            className={inputCls + ' resize-y font-[inherit]'}
                         />
                     </div>
 
-                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                        <button type="button" onClick={onClose} style={{ padding: '10px 18px', background: '#f1f5f9', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', fontSize: '14px', fontWeight: 500, cursor: 'pointer' }}>
+                    {/* Action Buttons */}
+                    <div className="flex gap-2.5 justify-end">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-[18px] py-2.5 bg-slate-100 border border-slate-200 rounded-lg text-slate-600 text-sm font-medium cursor-pointer hover:bg-slate-200 transition-colors"
+                        >
                             Cancel
                         </button>
-                        <button id="task-save" type="submit" disabled={isSaving} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 20px', background: '#0c3e78', border: 'none', borderRadius: '8px', color: 'white', fontSize: '14px', fontWeight: 600, cursor: isSaving ? 'not-allowed' : 'pointer', opacity: isSaving ? 0.7 : 1 }}>
+                        <button
+                            id="task-save"
+                            type="submit"
+                            disabled={isSaving}
+                            className={`inline-flex items-center gap-1.5 px-5 py-2.5 bg-brand border-none rounded-lg text-white text-sm font-semibold transition-opacity ${
+                                isSaving ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer hover:bg-brand-hover'
+                            }`}
+                        >
                             {task ? <Pencil size={15} /> : <Plus size={15} />}
                             {isSaving ? 'Saving…' : task ? 'Save Changes' : 'Create Task'}
                         </button>

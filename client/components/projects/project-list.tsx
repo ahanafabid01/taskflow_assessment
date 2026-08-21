@@ -16,119 +16,34 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
     return (
         <button
             onClick={onClick}
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                width: '100%',
-                minHeight: '160px',
-                textAlign: 'left',
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-lg)',
-                padding: '20px',
-                cursor: 'pointer',
-                boxShadow: 'var(--shadow-card)',
-                transition: 'transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease',
-            }}
-            onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent-purple)';
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(12, 62, 120, 0.09)';
-            }}
-            onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-                (e.currentTarget as HTMLElement).style.boxShadow = 'var(--shadow-card)';
-            }}
+            className="flex flex-col justify-between w-full min-h-[160px] text-left bg-white border border-slate-200 rounded-[14px] p-5 cursor-pointer shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all hover:border-brand hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(12,62,120,0.09)]"
         >
             <div>
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <div
-                        style={{
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '10px',
-                            background: 'rgba(12, 62, 120, 0.08)',
-                            border: '1px solid rgba(12, 62, 120, 0.15)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: '#0c3e78',
-                            flexShrink: 0,
-                        }}
-                    >
+                <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-[10px] bg-brand/[0.08] border border-brand/[0.15] flex items-center justify-center text-brand shrink-0">
                         <Folder size={20} />
                     </div>
-                    <span
-                        style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '5px',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            color: 'var(--text-secondary)',
-                            background: 'var(--bg-elevated)',
-                            padding: '3px 10px',
-                            borderRadius: '20px',
-                            border: '1px solid var(--border)',
-                        }}
-                    >
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200">
                         <CheckSquare size={12} />
                         {taskCount} {taskCount === 1 ? 'task' : 'tasks'}
                     </span>
                 </div>
 
-                <h3
-                    style={{
-                        fontSize: '16px',
-                        fontWeight: 700,
-                        color: 'var(--text-primary)',
-                        marginBottom: '6px',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                    }}
-                >
+                <h3 className="text-base font-bold text-slate-900 mb-1.5 overflow-hidden text-ellipsis whitespace-nowrap">
                     {project.title}
                 </h3>
                 {project.description && (
-                    <p
-                        style={{
-                            fontSize: '13px',
-                            color: 'var(--text-secondary)',
-                            lineHeight: 1.45,
-                            marginBottom: '12px',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                        }}
-                    >
+                    <p className="text-[13px] text-slate-600 leading-[1.45] mb-3 line-clamp-2">
                         {project.description}
                     </p>
                 )}
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle)' }}>
-                <div
-                    style={{
-                        width: '22px',
-                        height: '22px',
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #0c3e78, #1e40af)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '10px',
-                        fontWeight: 700,
-                        color: '#ffffff',
-                        flexShrink: 0,
-                    }}
-                >
+            <div className="flex items-center gap-2 pt-2.5 border-t border-slate-100">
+                <div className="w-[22px] h-[22px] rounded-full bg-gradient-to-br from-brand to-blue-700 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
                     {project.owner.name.charAt(0).toUpperCase()}
                 </div>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <span className="text-xs text-slate-600 overflow-hidden text-ellipsis whitespace-nowrap">
                     {project.owner.name}
                 </span>
             </div>
@@ -138,38 +53,19 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
 
 function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelect: (id: string) => void }) {
     return (
-        <div
-            style={{
-                width: '100%',
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-lg)',
-                overflow: 'hidden',
-                boxShadow: 'var(--shadow-card)',
-            }}
-        >
-            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
+        <div className="w-full bg-white border border-slate-200 rounded-[14px] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+            <div className="overflow-x-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
+                <table className="w-full border-collapse text-left min-w-[600px]">
                     <thead>
-                        <tr style={{ background: '#f8fafc', borderBottom: '1px solid var(--border)' }}>
-                            <th style={{ padding: '14px 18px', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                Project
-                            </th>
-                            <th style={{ padding: '14px 18px', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                Description
-                            </th>
-                            <th style={{ padding: '14px 18px', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                Tasks
-                            </th>
-                            <th style={{ padding: '14px 18px', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                Owner
-                            </th>
-                            <th style={{ padding: '14px 18px', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                Created
-                            </th>
-                            <th style={{ padding: '14px 18px', textAlign: 'right', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                Action
-                            </th>
+                        <tr className="bg-slate-50 border-b border-slate-200">
+                            {['Project', 'Description', 'Tasks', 'Owner', 'Created', 'Action'].map((h, i) => (
+                                <th
+                                    key={h}
+                                    className={`px-[18px] py-3.5 text-[11.5px] font-bold text-slate-600 uppercase tracking-[0.05em] ${i === 5 ? 'text-right' : ''}`}
+                                >
+                                    {h}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
                     <tbody>
@@ -183,51 +79,26 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
                                 <tr
                                     key={project.id}
                                     onClick={() => onSelect(project.id)}
-                                    style={{
-                                        borderBottom: idx < projects.length - 1 ? '1px solid var(--border-subtle)' : 'none',
-                                        cursor: 'pointer',
-                                        transition: 'background 0.15s ease',
-                                    }}
-                                    onMouseEnter={(e) => (e.currentTarget.style.background = '#f8fafc')}
-                                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                                    className={`cursor-pointer transition-colors hover:bg-slate-50 ${
+                                        idx < projects.length - 1 ? 'border-b border-slate-100' : ''
+                                    }`}
                                 >
                                     {/* Project Name */}
-                                    <td style={{ padding: '14px 18px' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                            <div
-                                                style={{
-                                                    width: '32px',
-                                                    height: '32px',
-                                                    borderRadius: '8px',
-                                                    background: 'rgba(12, 62, 120, 0.08)',
-                                                    border: '1px solid rgba(12, 62, 120, 0.15)',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    color: '#0c3e78',
-                                                    flexShrink: 0,
-                                                }}
-                                            >
+                                    <td className="px-[18px] py-3.5">
+                                        <div className="flex items-center gap-2.5">
+                                            <div className="w-8 h-8 rounded-lg bg-brand/[0.08] border border-brand/[0.15] flex items-center justify-center text-brand shrink-0">
                                                 <Folder size={16} />
                                             </div>
-                                            <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+                                            <span className="text-sm font-semibold text-slate-900 whitespace-nowrap">
                                                 {project.title}
                                             </span>
                                         </div>
                                     </td>
 
                                     {/* Description */}
-                                    <td style={{ padding: '14px 18px', maxWidth: '240px' }}>
+                                    <td className="px-[18px] py-3.5 max-w-[240px]">
                                         <span
-                                            style={{
-                                                fontSize: '13px',
-                                                color: 'var(--text-secondary)',
-                                                display: '-webkit-box',
-                                                WebkitLineClamp: 1,
-                                                WebkitBoxOrient: 'vertical',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                            }}
+                                            className="text-[13px] text-slate-600 line-clamp-1 overflow-hidden text-ellipsis whitespace-nowrap block"
                                             title={project.description ?? ''}
                                         >
                                             {project.description || '—'}
@@ -235,72 +106,33 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
                                     </td>
 
                                     {/* Task Count */}
-                                    <td style={{ padding: '14px 18px', whiteSpace: 'nowrap' }}>
-                                        <span
-                                            style={{
-                                                display: 'inline-flex',
-                                                alignItems: 'center',
-                                                gap: '5px',
-                                                fontSize: '12px',
-                                                fontWeight: 600,
-                                                color: 'var(--text-secondary)',
-                                                background: 'var(--bg-elevated)',
-                                                padding: '2px 8px',
-                                                borderRadius: '20px',
-                                                border: '1px solid var(--border)',
-                                            }}
-                                        >
+                                    <td className="px-[18px] py-3.5 whitespace-nowrap">
+                                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
                                             <CheckSquare size={12} />
                                             {taskCount} {taskCount === 1 ? 'task' : 'tasks'}
                                         </span>
                                     </td>
 
                                     {/* Owner */}
-                                    <td style={{ padding: '14px 18px', whiteSpace: 'nowrap' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <div
-                                                style={{
-                                                    width: '22px',
-                                                    height: '22px',
-                                                    borderRadius: '50%',
-                                                    background: 'linear-gradient(135deg, #0c3e78, #1e40af)',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    fontSize: '10px',
-                                                    fontWeight: 700,
-                                                    color: '#ffffff',
-                                                    flexShrink: 0,
-                                                }}
-                                            >
+                                    <td className="px-[18px] py-3.5 whitespace-nowrap">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-[22px] h-[22px] rounded-full bg-gradient-to-br from-brand to-blue-700 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
                                                 {project.owner.name.charAt(0).toUpperCase()}
                                             </div>
-                                            <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+                                            <span className="text-[13px] text-slate-600">
                                                 {project.owner.name}
                                             </span>
                                         </div>
                                     </td>
 
                                     {/* Created Date */}
-                                    <td style={{ padding: '14px 18px', fontSize: '12.5px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
+                                    <td className="px-[18px] py-3.5 text-[12.5px] text-slate-400 whitespace-nowrap">
                                         {createdDate}
                                     </td>
 
                                     {/* Action */}
-                                    <td style={{ padding: '14px 18px', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                                        <span
-                                            style={{
-                                                display: 'inline-flex',
-                                                alignItems: 'center',
-                                                gap: '4px',
-                                                fontSize: '12px',
-                                                fontWeight: 600,
-                                                color: '#0c3e78',
-                                                padding: '4px 8px',
-                                                borderRadius: '6px',
-                                                background: 'rgba(12, 62, 120, 0.08)',
-                                            }}
-                                        >
+                                    <td className="px-[18px] py-3.5 text-right whitespace-nowrap">
+                                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand px-2 py-1 rounded-md bg-brand/[0.08]">
                                             Open Board <ChevronRight size={13} />
                                         </span>
                                     </td>
@@ -336,40 +168,35 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
         );
     }
 
+    const inputCls = 'w-full px-3.5 py-3 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm outline-none box-border focus:border-brand transition-colors';
+
     return (
         <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
             <div className="modal-content animate-modal">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <FolderPlus size={20} style={{ color: '#0c3e78' }} />
-                        <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>Create New Project</h2>
+                {/* Header */}
+                <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center gap-2">
+                        <FolderPlus size={20} className="text-brand" />
+                        <h2 className="text-[18px] font-bold text-slate-900">Create New Project</h2>
                     </div>
                     <button
                         onClick={onClose}
                         aria-label="Close"
-                        style={{
-                            background: 'transparent',
-                            border: 'none',
-                            color: 'var(--text-muted)',
-                            cursor: 'pointer',
-                            padding: '4px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
+                        className="bg-transparent border-none text-slate-400 cursor-pointer p-1 flex items-center justify-center hover:text-slate-700 transition-colors"
                     >
                         <X size={18} />
                     </button>
                 </div>
 
                 {error && (
-                    <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '12px', marginBottom: '16px', color: 'var(--accent-red)', fontSize: '14px' }}>
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-red-600 text-sm">
                         {error}
                     </div>
                 )}
+
                 <form onSubmit={handleSubmit}>
-                    <div style={{ marginBottom: '16px' }}>
-                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
+                    <div className="mb-4">
+                        <label className="block text-[13px] font-semibold text-slate-900 mb-2">
                             Project name *
                         </label>
                         <input
@@ -379,14 +206,13 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
                             onChange={(e) => setTitle(e.target.value)}
                             placeholder="e.g. Mobile App Redesign"
                             autoFocus
-                            style={{ width: '100%', padding: '12px 14px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', color: 'var(--text-primary)', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
-                            onFocus={(e) => (e.target.style.borderColor = '#0c3e78')}
-                            onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
+                            className={inputCls}
                         />
                     </div>
-                    <div style={{ marginBottom: '24px' }}>
-                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
-                            Description <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional)</span>
+                    <div className="mb-6">
+                        <label className="block text-[13px] font-semibold text-slate-900 mb-2">
+                            Description{' '}
+                            <span className="text-slate-400 font-normal">(optional)</span>
                         </label>
                         <textarea
                             id="new-project-description"
@@ -394,16 +220,25 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Project goals, scope, criteria..."
                             rows={3}
-                            style={{ width: '100%', padding: '12px 14px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', color: 'var(--text-primary)', fontSize: '14px', outline: 'none', resize: 'vertical', fontFamily: 'inherit', boxSizing: 'border-box' }}
-                            onFocus={(e) => (e.target.style.borderColor = '#0c3e78')}
-                            onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
+                            className={inputCls + ' resize-y font-[inherit]'}
                         />
                     </div>
-                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                        <button type="button" onClick={onClose} style={{ padding: '10px 18px', background: '#f1f5f9', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', fontSize: '14px', fontWeight: 500, cursor: 'pointer' }}>
+                    <div className="flex gap-2.5 justify-end">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-[18px] py-2.5 bg-slate-100 border border-slate-200 rounded-lg text-slate-600 text-sm font-medium cursor-pointer hover:bg-slate-200 transition-colors"
+                        >
                             Cancel
                         </button>
-                        <button id="create-project-submit" type="submit" disabled={isPending} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 20px', background: '#0c3e78', border: 'none', borderRadius: '8px', color: 'white', fontSize: '14px', fontWeight: 600, cursor: isPending ? 'not-allowed' : 'pointer', opacity: isPending ? 0.7 : 1 }}>
+                        <button
+                            id="create-project-submit"
+                            type="submit"
+                            disabled={isPending}
+                            className={`inline-flex items-center gap-1.5 px-5 py-2.5 bg-brand border-none rounded-lg text-white text-sm font-semibold transition-opacity ${
+                                isPending ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer hover:bg-brand-hover'
+                            }`}
+                        >
                             <Plus size={16} />
                             {isPending ? 'Creating…' : 'Create Project'}
                         </button>
@@ -420,24 +255,20 @@ export function ProjectList() {
     const [page, setPage] = useState(1);
     const router = useRouter();
 
-    const { data, isLoading, error } = useProjects({
-        page,
-        limit: 12,
-    });
+    const { data, isLoading, error } = useProjects({ page, limit: 12 });
     const projects = data?.projects ?? [];
     const pagination = data?.pagination;
 
-
     if (isLoading) {
         return (
-            <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>Loading projects…</div>
+            <div className="min-h-dvh flex items-center justify-center">
+                <div className="text-slate-600 text-[15px]">Loading projects…</div>
             </div>
         );
     }
 
     return (
-        <div style={{ minHeight: '100dvh', background: 'var(--bg-primary)', width: '100%', overflowX: 'hidden' }}>
+        <div className="min-h-dvh bg-slate-50 w-full overflow-x-hidden">
             {/* Navigation */}
             <AppNavbar />
 
@@ -445,27 +276,20 @@ export function ProjectList() {
                 {/* Header */}
                 <div className="page-header">
                     <div>
-                        <h1 style={{ fontSize: 'clamp(22px, 4vw, 30px)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '4px', letterSpacing: '-0.025em' }}>Projects</h1>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
+                        <h1 className="text-[clamp(22px,4vw,30px)] font-extrabold text-slate-900 mb-1 tracking-[-0.025em]">
+                            Projects
+                        </h1>
+                        <p className="text-slate-600 text-sm">
                             {pagination?.total ?? 0} {(pagination?.total ?? 0) === 1 ? 'project' : 'projects'} total
                         </p>
                     </div>
 
                     <div className="page-header-actions">
-                        {/* View Switcher: Cards vs Table */}
+                        {/* View Switcher */}
                         <div
                             role="group"
                             aria-label="Projects view mode"
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                background: '#ffffff',
-                                border: '1px solid var(--border)',
-                                borderRadius: '10px',
-                                padding: '3px',
-                                gap: '3px',
-                                boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
-                            }}
+                            className="flex items-center bg-white border border-slate-200 rounded-[10px] p-[3px] gap-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
                         >
                             <button
                                 type="button"
@@ -473,20 +297,11 @@ export function ProjectList() {
                                 onClick={() => setViewMode('grid')}
                                 title="Card Grid View"
                                 aria-pressed={viewMode === 'grid'}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '6px',
-                                    padding: '7px 12px',
-                                    borderRadius: '7px',
-                                    border: 'none',
-                                    background: viewMode === 'grid' ? '#0c3e78' : 'transparent',
-                                    color: viewMode === 'grid' ? '#ffffff' : 'var(--text-secondary)',
-                                    fontSize: '13px',
-                                    fontWeight: 600,
-                                    cursor: 'pointer',
-                                    transition: 'all 0.15s ease',
-                                }}
+                                className={`flex items-center gap-1.5 px-3 py-[7px] rounded-[7px] border-none text-[13px] font-semibold cursor-pointer transition-all ${
+                                    viewMode === 'grid'
+                                        ? 'bg-brand text-white'
+                                        : 'bg-transparent text-slate-600 hover:bg-slate-100'
+                                }`}
                             >
                                 <LayoutGrid size={15} />
                                 <span>Cards</span>
@@ -497,47 +312,22 @@ export function ProjectList() {
                                 onClick={() => setViewMode('table')}
                                 title="Table View"
                                 aria-pressed={viewMode === 'table'}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '6px',
-                                    padding: '7px 12px',
-                                    borderRadius: '7px',
-                                    border: 'none',
-                                    background: viewMode === 'table' ? '#0c3e78' : 'transparent',
-                                    color: viewMode === 'table' ? '#ffffff' : 'var(--text-secondary)',
-                                    fontSize: '13px',
-                                    fontWeight: 600,
-                                    cursor: 'pointer',
-                                    transition: 'all 0.15s ease',
-                                }}
+                                className={`flex items-center gap-1.5 px-3 py-[7px] rounded-[7px] border-none text-[13px] font-semibold cursor-pointer transition-all ${
+                                    viewMode === 'table'
+                                        ? 'bg-brand text-white'
+                                        : 'bg-transparent text-slate-600 hover:bg-slate-100'
+                                }`}
                             >
                                 <Table size={15} />
                                 <span>Table</span>
                             </button>
                         </div>
 
-                        {/* New Project Button at right corner */}
+                        {/* New Project Button */}
                         <button
                             id="open-create-project"
                             onClick={() => setShowModal(true)}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '8px',
-                                padding: '10px 18px',
-                                background: '#0c3e78',
-                                border: 'none',
-                                borderRadius: '10px',
-                                color: 'white',
-                                fontSize: '14px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                boxShadow: '0 1px 3px rgba(12, 62, 120, 0.2)',
-                                flexShrink: 0,
-                                marginLeft: 'auto',
-                            }}
+                            className="flex items-center justify-center gap-2 px-[18px] py-2.5 bg-brand border-none rounded-[10px] text-white text-sm font-semibold cursor-pointer shadow-[0_1px_3px_rgba(12,62,120,0.2)] shrink-0 ml-auto hover:bg-brand-hover transition-colors"
                         >
                             <Plus size={16} /> New Project
                         </button>
@@ -545,33 +335,21 @@ export function ProjectList() {
                 </div>
 
                 {error && (
-                    <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '10px', padding: '16px', marginBottom: '24px', color: 'var(--accent-red)' }}>
+                    <div className="bg-red-50 border border-red-200 rounded-[10px] p-4 mb-6 text-red-600">
                         Failed to load projects. Please refresh.
                     </div>
                 )}
 
                 {!projects.length ? (
-                    <div style={{ textAlign: 'center', padding: '60px 16px', background: 'var(--bg-card)', border: '1px dashed var(--border)', borderRadius: 'var(--radius-lg)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px', color: 'var(--text-muted)' }}>
+                    <div className="text-center py-[60px] px-4 bg-white border border-dashed border-slate-200 rounded-[14px]">
+                        <div className="flex justify-center mb-3 text-slate-400">
                             <Layers size={48} />
                         </div>
-                        <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>No projects yet</h3>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '20px' }}>Create your first project to get started</p>
+                        <h3 className="text-[18px] font-semibold text-slate-900 mb-1.5">No projects yet</h3>
+                        <p className="text-slate-600 text-sm mb-5">Create your first project to get started</p>
                         <button
                             onClick={() => setShowModal(true)}
-                            style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                padding: '11px 22px',
-                                background: '#0c3e78',
-                                border: 'none',
-                                borderRadius: '10px',
-                                color: 'white',
-                                fontSize: '14px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                            }}
+                            className="inline-flex items-center gap-2 px-[22px] py-[11px] bg-brand border-none rounded-[10px] text-white text-sm font-semibold cursor-pointer hover:bg-brand-hover transition-colors"
                         >
                             <Plus size={16} /> Create Project
                         </button>
@@ -593,24 +371,29 @@ export function ProjectList() {
                     />
                 )}
 
+                {/* Pagination */}
                 {pagination && pagination.totalPages > 1 && (
-                    <nav aria-label="Project pagination" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginTop: '32px' }}>
+                    <nav aria-label="Project pagination" className="flex items-center justify-center gap-3 mt-8">
                         <button
                             type="button"
                             onClick={() => setPage((current) => Math.max(1, current - 1))}
                             disabled={pagination.page === 1}
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '9px 13px', background: '#ffffff', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', cursor: pagination.page === 1 ? 'not-allowed' : 'pointer', opacity: pagination.page === 1 ? 0.5 : 1, boxShadow: '0 1px 2px rgba(0,0,0,0.03)' }}
+                            className={`inline-flex items-center gap-1.5 px-[13px] py-[9px] bg-white border border-slate-200 rounded-lg text-slate-600 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-all ${
+                                pagination.page === 1 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-slate-50'
+                            }`}
                         >
                             <ChevronLeft size={16} /> Previous
                         </button>
-                        <span style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>
+                        <span className="text-slate-600 text-[13px]">
                             Page {pagination.page} of {pagination.totalPages}
                         </span>
                         <button
                             type="button"
                             onClick={() => setPage((current) => Math.min(pagination.totalPages, current + 1))}
                             disabled={pagination.page === pagination.totalPages}
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '9px 13px', background: '#ffffff', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', cursor: pagination.page === pagination.totalPages ? 'not-allowed' : 'pointer', opacity: pagination.page === pagination.totalPages ? 0.5 : 1, boxShadow: '0 1px 2px rgba(0,0,0,0.03)' }}
+                            className={`inline-flex items-center gap-1.5 px-[13px] py-[9px] bg-white border border-slate-200 rounded-lg text-slate-600 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-all ${
+                                pagination.page === pagination.totalPages ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-slate-50'
+                            }`}
                         >
                             Next <ChevronRight size={16} />
                         </button>
