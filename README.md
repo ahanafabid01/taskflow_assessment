@@ -24,7 +24,7 @@ The Next.js pages and layout are Server Components by default. Interactive UI, b
 
 - Register and login with bcrypt-hashed passwords and JWT Bearer authentication
 - Protected projects and Kanban board routes; an expired or invalid session is cleared and redirected to `/login`
-- Create and paginate accessible projects (12 per page by default)
+- Create and paginate accessible projects (12 per page by default); project titles are unique per owner (enforced case-insensitively)
 - Create, edit, assign, filter, search, and delete tasks; collaborators see only tasks assigned to them
 - Drag tasks between Todo, In Progress, and Done columns
 - TanStack Query caching, mutation invalidation, optimistic task updates, and debounced task search
@@ -175,6 +175,7 @@ server/                  Express API
 
 - Prisma parameterizes database access and avoids raw SQL.
 - Foreign keys model ownership, project-task relationships, and optional task assignees.
+- Compound unique constraints and validation prevent duplicate project titles per owner.
 - Indexed fields support project ownership and task project/status/priority/assignee lookups.
 - `helmet`, CORS configuration, bcrypt password hashing, validation, and centralized error handling are enabled.
 - `.env`, build output, dependency folders, logs, and TypeScript cache files are ignored by Git. Only safe `.env.example` templates are tracked.

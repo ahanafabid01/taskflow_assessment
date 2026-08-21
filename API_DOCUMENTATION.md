@@ -80,7 +80,7 @@ Returns projects owned by the current user or containing a task assigned to them
 }
 ```
 
-Returns `201 Created`. `title` is required and may be at most 255 characters.
+Returns `201 Created`. `title` is required (automatically trimmed) and may be at most 255 characters. An owner cannot create duplicate project titles, enforced case-insensitively. A duplicate title returns `409 Conflict`.
 
 ### `GET /api/projects/:id`
 
@@ -142,5 +142,5 @@ Returns users with `id`, `name`, and `email` for the task-assignee picker.
 | 401 | Missing, invalid, or expired authentication token |
 | 403 | Authenticated user lacks permission |
 | 404 | Route or resource not found |
-| 409 | Duplicate registration email |
+| 409 | Duplicate registration email or duplicate project title per owner |
 | 500 | Unexpected server error (implementation details are not exposed) |

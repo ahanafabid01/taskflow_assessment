@@ -138,26 +138,16 @@
         },
         {
           "name": "Create project",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Postman Project\",\n  \"description\": \"Created through the TaskFlow Postman collection.\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.variables.set('projectTitle', 'Postman Project ' + Date.now());"
+                ]
               }
             },
-            "url": "{{baseUrl}}/api/projects"
-          },
-          "event": [
             {
               "listen": "test",
               "script": {
@@ -169,7 +159,26 @@
                 ]
               }
             }
-          ]
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"{{projectTitle}}\",\n  \"description\": \"Created through the TaskFlow Postman collection.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/projects"
+          }
         },
         {
           "name": "Get project",
