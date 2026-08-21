@@ -16,7 +16,7 @@ import {
     type DragEndEvent,
     type DragOverEvent,
 } from '@dnd-kit/core';
-import { Folder, Layers, ChevronDown, ChevronUp } from 'lucide-react';
+import { Folder, Layers, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
 import { KanbanColumn } from './kanban-column';
 import { TaskCard } from './task-card';
 import { TaskModal } from '../tasks/task-modal';
@@ -25,6 +25,66 @@ import { useProjectTasks, useCreateTask, useUpdateTask, useDeleteTask } from '@/
 import { useProject } from '@/hooks/use-projects';
 import { KanbanBoardSkeleton } from '@/components/ui/loading';
 import type { Task, TaskStatus, TaskFilters, CreateTaskInput, UpdateTaskInput } from '@/types';
+
+function DeleteTaskModal({
+    task,
+    isDeleting,
+    onConfirm,
+    onClose,
+}: {
+    task: Task;
+    isDeleting: boolean;
+    onConfirm: () => void;
+    onClose: () => void;
+}) {
+    useEffect(() => {
+        function handleKeyDown(e: KeyboardEvent) {
+            if (e.key === 'Escape') onClose();
+        }
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [onClose]);
+
+    return (
+        <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+            <div className="modal-content animate-modal max-w-[420px]">
+                <div className="flex items-start gap-3.5 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-red-50 border border-red-200 flex items-center justify-center text-red-600 shrink-0">
+                        <Trash2 size={20} />
+                    </div>
+                    <div>
+                        <h3 className="text-base font-bold text-slate-900 mb-1">Delete Task</h3>
+                        <p className="text-[13.5px] text-slate-600 leading-relaxed m-0">
+                            Are you sure you want to delete <span className="font-semibold text-slate-900">&quot;{task.title}&quot;</span>? This action cannot be undone.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="flex gap-2.5 justify-end mt-6 pt-3 border-t border-slate-100">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        disabled={isDeleting}
+                        className="px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-lg text-slate-600 text-sm font-medium cursor-pointer hover:bg-slate-200 transition-colors"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onConfirm}
+                        disabled={isDeleting}
+                        className={`inline-flex items-center gap-1.5 px-4 py-2.5 bg-red-600 border-none rounded-lg text-white text-sm font-semibold transition-opacity ${
+                            isDeleting ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer hover:bg-red-700'
+                        }`}
+                    >
+                        <Trash2 size={15} />
+                        {isDeleting ? 'Deleting…' : 'Delete Task'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 const STATUSES: TaskStatus[] = ['TODO', 'IN_PROGRESS', 'DONE'];
 
@@ -50,6 +110,7 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
     const [filters, setFilters] = useState<TaskFilters>({});
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
     const [activeTask, setActiveTask] = useState<Task | null>(null);
+    const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
     const [modalTask, setModalTask] = useState<Task | null | undefined>(undefined);
     const [defaultStatus, setDefaultStatus] = useState<TaskStatus>('TODO');
     const debouncedSearch = useDebouncedValue(filters.search ?? '', 300);
@@ -122,10 +183,21 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
     }, [modalTask, createTask, updateTask]);
 
     const handleDeleteTask = useCallback((taskId: string) => {
-        if (confirm('Delete this task?')) {
-            deleteTask.mutate(taskId);
+        const target = tasks.find((t) => t.id === taskId);
+        if (target) {
+            setTaskToDelete(target);
         }
-    }, [deleteTask]);
+    }, [tasks]);
+
+    const handleConfirmDelete = useCallback(async () => {
+        if (!taskToDelete) return;
+        try {
+            await deleteTask.mutateAsync(taskToDelete.id);
+            setTaskToDelete(null);
+        } catch {
+            // Error is handled by TanStack Query & optimistic rollback
+        }
+    }, [taskToDelete, deleteTask]);
 
     if (isLoading) {
         return <KanbanBoardSkeleton />;
@@ -229,7 +301,7 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
                 </DndContext>
             </div>
 
-            {/* Task Modal */}
+            {/* Task Create/Edit Modal */}
             {modalTask !== undefined && (
                 <TaskModal
                     task={modalTask}
@@ -237,6 +309,16 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
                     projectId={projectId}
                     onSave={handleSaveTask}
                     onClose={() => setModalTask(undefined)}
+                />
+            )}
+
+            {/* Task Delete Confirmation Modal */}
+            {taskToDelete !== null && (
+                <DeleteTaskModal
+                    task={taskToDelete}
+                    isDeleting={deleteTask.isPending}
+                    onConfirm={handleConfirmDelete}
+                    onClose={() => setTaskToDelete(null)}
                 />
             )}
         </div>
