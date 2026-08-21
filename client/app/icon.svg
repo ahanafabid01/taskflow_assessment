@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="tf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c6af7"/>
+      <stop offset="100%" stop-color="#4f7ef7"/>
+    </linearGradient>
+    <linearGradient id="tf-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9585f8" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#4f7ef7" stop-opacity="0.1"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Base Card -->
+  <rect width="32" height="32" rx="8" fill="#0f0f18"/>
+  <rect width="32" height="32" rx="8" fill="url(#tf-glow)"/>
+  <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" fill="none" stroke="#2a2a40" stroke-width="1"/>
+
+  <!-- Kanban Column 1 (Left, active) -->
+  <rect x="5.5" y="7" width="5.5" height="18" rx="2.5" fill="url(#tf-grad)" filter="url(#shadow)"/>
+  
+  <!-- Kanban Column 2 (Middle, taller) -->
+  <rect x="13.25" y="7" width="5.5" height="14" rx="2.5" fill="url(#tf-grad)" opacity="0.85"/>
+  
+  <!-- Kanban Column 3 (Right, done/accent) -->
+  <rect x="21" y="7" width="5.5" height="10" rx="2.5" fill="url(#tf-grad)" opacity="0.5"/>
+
+  <!-- Check dot / Flow indicator on completed column -->
+  <circle cx="23.75" cy="21.5" r="2.25" fill="#34c77b"/>
+</svg>

@@ -1,26 +1,287 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
 @import "tailwindcss";
 
+.font-brand {
+  font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-logo {
+  font-family: 'Outfit', -apple-system, sans-serif;
+  font-weight: 750;
+  letter-spacing: -0.035em;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #111118;
+  --bg-card: #16161e;
+  --bg-elevated: #1e1e2a;
+  --border: #2a2a3a;
+  --border-subtle: #1e1e28;
+  --text-primary: #f0f0f8;
+  --text-secondary: #8888a8;
+  --text-muted: #55556a;
+  --accent-purple: #7c6af7;
+  --accent-purple-hover: #9585f8;
+  --accent-purple-dim: rgba(124, 106, 247, 0.15);
+  --accent-blue: #4f7ef7;
+  --accent-green: #34c77b;
+  --accent-amber: #f59e0b;
+  --accent-red: #f05060;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.5);
+
+  --page-padding: 16px;
+  --section-gap: 20px;
+  --nav-h: 56px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (min-width: 768px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --page-padding: 24px;
+    --section-gap: 28px;
+    --nav-h: 60px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Focus outline */
+:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button, a, input, textarea, select { transition: all 0.15s ease; }
+
+/* Native Date Input & Calendar Picker Optimization */
+input[type="date"] {
+  color-scheme: dark;
+  font-family: inherit;
+  font-size: 13.5px;
+  letter-spacing: 0.2px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.75;
+  filter: invert(0.85);
+  padding: 2px;
+  border-radius: 4px;
+  transition: opacity 0.15s ease, filter 0.15s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  filter: invert(1);
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+.glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+/* ── Container Layouts ─────────────────────────────────────────────────── */
+
+.page-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--page-padding);
+  box-sizing: border-box;
+}
+
+/* Project grid */
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+}
+@media (min-width: 540px) {
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 960px) {
+  .projects-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+}
+@media (min-width: 1240px) {
+  .projects-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Kanban Board Container */
+.kanban-board-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 20px;
+  /* Clip any stray overflow so the PAGE never gets a second h-scrollbar */
+  max-width: 100%;
+}
+
+.kanban-board {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  /* On mobile/tablet: fixed-width cols scrollable inside the wrapper */
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Columns */
+.kanban-col {
+  flex: 0 0 280px;
+  width: 280px;
+}
+
+/* On large screens: stretch all 3 cols evenly — no overflow, no scrollbar */
+@media (min-width: 960px) {
+  .kanban-board {
+    width: 100%;
+  }
+  .kanban-col {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+  }
+}
+
+/* ── Centered Modal (Mobile & Desktop) ─────────────────────────────────── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.modal-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+  width: 100%;
+  max-width: 500px;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px;
+  margin: auto;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .modal-content {
+    padding: 30px;
+  }
+}
+
+/* Navigation */
+.app-nav {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  width: 100%;
+}
+.app-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  gap: 12px;
+}
+
+.nav-user-container {
+  padding: 4px 10px 4px 5px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 30px;
+}
+
+@media (max-width: 640px) {
+  .nav-user-container {
+    padding: 0;
+    background: transparent;
+    border: none;
+  }
+  .nav-user-label {
+    display: none !important;
+  }
+  .nav-signout-text {
+    display: none !important;
+  }
+}
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: var(--section-gap);
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .page-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 480px) {
+  .form-grid-2 { grid-template-columns: 1fr 1fr; }
+}
+
+/* Animations */
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-modal { animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
