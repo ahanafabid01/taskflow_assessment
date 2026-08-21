@@ -162,20 +162,12 @@ export function LoginForm() {
 
                         {/* Password Field */}
                         <div className="mb-[18px]">
-                            <div className="flex items-center justify-between mb-1.5">
-                                <label
-                                    htmlFor="login-password"
-                                    className="text-[11px] font-bold tracking-[0.06em] text-slate-600 uppercase"
-                                >
-                                    PASSWORD
-                                </label>
-                                <span
-                                    className="text-xs font-medium text-brand cursor-pointer"
-                                    onClick={() => alert('Please contact your administrator to reset your password.')}
-                                >
-                                    Forgot password?
-                                </span>
-                            </div>
+                            <label
+                                htmlFor="login-password"
+                                className="block text-[11px] font-bold tracking-[0.06em] text-slate-600 uppercase mb-1.5"
+                            >
+                                PASSWORD
+                            </label>
                             <div className="relative">
                                 <Lock
                                     size={16}
