@@ -2,14 +2,18 @@
 // Handles HTTP layer for project operations.
 
 import { Request, Response, NextFunction } from 'express';
-import { createProjectSchema } from '../validators/project.validators';
+import { createProjectSchema, projectQuerySchema } from '../validators/project.validators';
 import * as projectService from '../services/project.service';
 import { AppError } from '../middleware/error.middleware';
 
 export async function getProjects(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const userId = req.user!.id;
-        const projects = await projectService.getProjectsForUser(userId);
+        const queryResult = projectQuerySchema.safeParse(req.query);
+        if (!queryResult.success) {
+            throw new AppError(400, queryResult.error.issues.map((issue) => issue.message).join(', '));
+        }
+        const projects = await projectService.getProjectsForUser(userId, queryResult.data);
         res.status(200).json({ data: projects });
     } catch (err) {
         next(err);

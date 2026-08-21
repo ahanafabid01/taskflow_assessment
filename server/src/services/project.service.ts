@@ -2,24 +2,50 @@
 // Project business logic: create and retrieve projects.
 
 import prisma from '../db/prisma';
+import type { Prisma } from '@prisma/client';
 import { AppError } from '../middleware/error.middleware';
-import type { CreateProjectInput } from '../validators/project.validators';
+import type { CreateProjectInput, ProjectQueryInput } from '../validators/project.validators';
 
-export async function getProjectsForUser(userId: string) {
-    // Return projects owned by or assigned to the user (via task assignment)
-    return prisma.project.findMany({
-        where: {
+export async function getProjectsForUser(userId: string, query: ProjectQueryInput) {
+    const accessFilter: Prisma.ProjectWhereInput = {
+        OR: [{ ownerId: userId }, { tasks: { some: { assignedTo: userId } } }],
+    };
+    const searchFilter: Prisma.ProjectWhereInput | undefined = query.search
+        ? {
             OR: [
-                { ownerId: userId },
-                { tasks: { some: { assignedTo: userId } } },
+                { title: { contains: query.search, mode: 'insensitive' } },
+                { description: { contains: query.search, mode: 'insensitive' } },
             ],
-        },
+        }
+        : undefined;
+    const where: Prisma.ProjectWhereInput = searchFilter
+        ? { AND: [accessFilter, searchFilter] }
+        : accessFilter;
+    const skip = (query.page - 1) * query.limit;
+
+    const [projects, total] = await prisma.$transaction([
+        prisma.project.findMany({
+            where,
+            skip,
+            take: query.limit,
         include: {
             owner: { select: { id: true, name: true, email: true } },
             _count: { select: { tasks: true } },
         },
         orderBy: { createdAt: 'desc' },
-    });
+        }),
+        prisma.project.count({ where }),
+    ]);
+
+    return {
+        projects,
+        pagination: {
+            page: query.page,
+            limit: query.limit,
+            total,
+            totalPages: Math.max(1, Math.ceil(total / query.limit)),
+        },
+    };
 }
 
 export async function createProject(userId: string, input: CreateProjectInput) {

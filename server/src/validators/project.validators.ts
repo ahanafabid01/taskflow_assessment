@@ -8,4 +8,11 @@ export const createProjectSchema = z.object({
     description: z.string().optional(),
 });
 
+export const projectQuerySchema = z.object({
+    search: z.string().trim().max(100).optional(),
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(24).default(12),
+});
+
 export type CreateProjectInput = z.infer<typeof createProjectSchema>;
+export type ProjectQueryInput = z.infer<typeof projectQuerySchema>;

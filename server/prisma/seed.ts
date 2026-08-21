@@ -6,7 +6,8 @@ import prisma from '../src/db/prisma';
 
 const DEMO_PASSWORD = 'TaskFlowDemo2026!';
 const PROJECT_COUNT = 50;
-const TASKS_PER_PROJECT = 6;
+const MIN_TASKS_PER_PROJECT = 3;
+const TASK_RANGE = 10;
 
 const demoUsers = [
   { name: 'Abid Rahman', email: 'abid@taskflow.demo' },
@@ -31,7 +32,7 @@ const statuses = ['TODO', 'IN_PROGRESS', 'DONE'] as const;
 const priorities = ['LOW', 'MEDIUM', 'HIGH'] as const;
 
 async function main() {
-  console.log(`Seeding ${PROJECT_COUNT} projects and ${PROJECT_COUNT * TASKS_PER_PROJECT} tasks...`);
+  console.log(`Seeding ${PROJECT_COUNT} projects with varied task counts...`);
 
   const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 12);
   const users = await Promise.all(
@@ -63,17 +64,18 @@ async function main() {
     await prisma.project.upsert({ where: { id: projectId }, update: project, create: { id: projectId, ...project } });
   }
 
-  const tasks = projectIds.flatMap((projectId, projectIndex) =>
-    taskTemplates.map((title, taskIndex) => ({
+  const tasks = projectIds.flatMap((projectId, projectIndex) => {
+    const taskCount = MIN_TASKS_PER_PROJECT + ((projectIndex * 7) % TASK_RANGE);
+    return Array.from({ length: taskCount }, (_, taskIndex) => ({
       projectId,
-      title: `${title} — Project ${projectIndex + 1}`,
+      title: `${taskTemplates[taskIndex % taskTemplates.length]} — Project ${projectIndex + 1}`,
       description: `Demo task ${taskIndex + 1} for assessment project ${projectIndex + 1}.`,
       status: statuses[taskIndex % statuses.length],
       priority: priorities[(projectIndex + taskIndex) % priorities.length],
       assignedTo: users[(projectIndex + taskIndex) % users.length].id,
       dueDate: new Date(Date.UTC(2026, 8, 1 + projectIndex + taskIndex)),
-    })),
-  );
+    }));
+  });
 
   await prisma.task.createMany({ data: tasks });
   console.log(`✅ Seed complete: ${users.length} users, ${PROJECT_COUNT} projects, ${tasks.length} tasks.`);

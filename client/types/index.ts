@@ -74,6 +74,22 @@ export interface CreateProjectInput {
   description?: string;
 }
 
+export interface ProjectFilters {
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface ProjectPage {
+  projects: Project[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
 // ─── Task ─────────────────────────────────────────────────────────────────────
 
 export interface CreateTaskInput {
@@ -104,6 +120,7 @@ export interface TaskFilters {
 
 export const QUERY_KEYS = {
   projects: ['projects'] as const,
+  projectsFiltered: (filters: ProjectFilters) => ['projects', filters] as const,
   projectTasks: (projectId: string) => ['projects', projectId, 'tasks'] as const,
   projectTasksFiltered: (projectId: string, filters: TaskFilters) =>
     ['projects', projectId, 'tasks', filters] as const,
