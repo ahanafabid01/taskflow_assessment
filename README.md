@@ -38,7 +38,7 @@ The Next.js pages and layout are Server Components by default. Interactive UI, b
 
 ## Setup
 
-### 1. Configure the API
+### 1. Configure the server
 
 From the repository root, copy the template and supply real database and JWT values:
 
