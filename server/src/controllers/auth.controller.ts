@@ -1,20 +1,35 @@
-import {request, response} from 'express';
-import {registerUser} from '../services/auth.services';
+// src/controllers/auth.controller.ts
+// Handles HTTP layer for authentication: reads request, calls service, responds.
 
-export async function register (req: typeof request, res: typeof response) {
-    try{
-        const {email, password, name} = req.body;
+import { Request, Response, NextFunction } from 'express';
+import { registerSchema, loginSchema } from '../validators/auth.validators';
+import * as authService from '../services/auth.service';
+import { AppError } from '../middleware/error.middleware';
 
-        if (!email || !password || !name)  {
-            return res.status(400).json({ error: 'All fields are required' });
-        }
-
-        const user = await registerUser(email, password, name);
-        res.status(201).json(user);
-    } catch (error) {
-      if (error.code === '23505') { // Unique violation error code for PostgreSQL
-        return res.status(409).json({ error: 'Email already exists' });
-      }
-      res.status(500).json({ error: 'Error registering user' });
+export async function register(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const parseResult = registerSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      throw new AppError(400, parseResult.error.issues.map((issue) => issue.message).join(', '));
     }
+
+    const result = await authService.registerUser(parseResult.data);
+    res.status(201).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function login(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const parseResult = loginSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      throw new AppError(400, parseResult.error.issues.map((issue) => issue.message).join(', '));
+    }
+
+    const result = await authService.loginUser(parseResult.data);
+    res.status(200).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
 }
