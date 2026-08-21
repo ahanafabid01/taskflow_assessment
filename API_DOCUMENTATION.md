@@ -90,7 +90,7 @@ Returns an accessible project with its owner and task count. A nonexistent proje
 
 ### `GET /api/projects/:id/tasks`
 
-Returns tasks for an accessible project. Query parameters are optional:
+Returns tasks for an accessible project. Project owners receive every task; collaborators receive only tasks assigned to their account. Query parameters are optional:
 
 - `search`: case-insensitive task-title search
 - `status`: `TODO`, `IN_PROGRESS`, or `DONE`

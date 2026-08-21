@@ -25,7 +25,7 @@ The Next.js pages and layout are Server Components by default. Interactive UI, b
 - Register and login with bcrypt-hashed passwords and JWT Bearer authentication
 - Protected projects and Kanban board routes; an expired or invalid session is cleared and redirected to `/login`
 - Create and paginate accessible projects (12 per page by default)
-- Create, edit, assign, filter, search, and delete tasks
+- Create, edit, assign, filter, search, and delete tasks; collaborators see only tasks assigned to them
 - Drag tasks between Todo, In Progress, and Done columns
 - TanStack Query caching, mutation invalidation, optimistic task updates, and debounced task search
 - Input validation, authorization checks, standard HTTP status codes, and central error handling

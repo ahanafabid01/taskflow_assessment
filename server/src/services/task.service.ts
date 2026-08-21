@@ -5,15 +5,20 @@ import prisma from '../db/prisma';
 import { AppError } from '../middleware/error.middleware';
 import type { CreateTaskInput, UpdateTaskInput, TaskQueryInput } from '../validators/task.validators';
 
-/** Verifies the user can access tasks in this project. */
-async function assertProjectAccess(projectId: string, userId: string): Promise<void> {
+/**
+ * Verifies project access and returns whether the current user owns the project.
+ * Owners can view every task; collaborators can view only tasks assigned to them.
+ */
+async function assertProjectAccess(projectId: string, userId: string): Promise<boolean> {
     const project = await prisma.project.findUnique({ where: { id: projectId } });
     if (!project) throw new AppError(404, 'Project not found');
 
-    if (project.ownerId !== userId) {
-        const assigned = await prisma.task.findFirst({ where: { projectId, assignedTo: userId } });
-        if (!assigned) throw new AppError(403, 'Access denied');
-    }
+    if (project.ownerId === userId) return true;
+
+    const assigned = await prisma.task.findFirst({ where: { projectId, assignedTo: userId } });
+    if (!assigned) throw new AppError(403, 'Access denied');
+
+    return false;
 }
 
 export async function getProjectTasks(
@@ -21,11 +26,14 @@ export async function getProjectTasks(
     userId: string,
     query: TaskQueryInput,
 ) {
-    await assertProjectAccess(projectId, userId);
+    const isOwner = await assertProjectAccess(projectId, userId);
 
     return prisma.task.findMany({
         where: {
             projectId,
+            // A collaborator has project access through an assignment, but must not
+            // receive other collaborators' tasks or unassigned owner tasks.
+            ...(!isOwner && { assignedTo: userId }),
             ...(query.status && { status: query.status }),
             ...(query.priority && { priority: query.priority }),
             ...(query.search && {
