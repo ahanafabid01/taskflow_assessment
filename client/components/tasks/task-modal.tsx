@@ -300,10 +300,16 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [onClose]);
 
+    const todayStr = new Date().toISOString().split('T')[0];
+
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         if (!title.trim()) {
             setError('Title is required');
+            return;
+        }
+        if (dueDate && dueDate < todayStr) {
+            setError('Due date cannot be in the past');
             return;
         }
         setError('');
@@ -425,6 +431,7 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                             <input
                                 id="task-due-date"
                                 type="date"
+                                min={todayStr}
                                 value={dueDate}
                                 onChange={(e) => setDueDate(e.target.value)}
                                 onClick={(e) => {
