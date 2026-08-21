@@ -28,10 +28,10 @@ export function TaskFiltersBar({ filters, onChange }: TaskFiltersProps) {
         [filters, onChange],
     );
 
-    const PRIORITY_COLORS: Record<TaskPriority, string> = {
-        LOW: '#34c77b',
-        MEDIUM: '#f59e0b',
-        HIGH: '#f05060',
+    const PRIORITY_COLORS: Record<TaskPriority, { color: string; bg: string; border: string }> = {
+        LOW: { color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0' },
+        MEDIUM: { color: '#d97706', bg: '#fffbeb', border: '#fde68a' },
+        HIGH: { color: '#dc2626', bg: '#fef2f2', border: '#fecaca' },
     };
 
     return (
@@ -69,16 +69,23 @@ export function TaskFiltersBar({ filters, onChange }: TaskFiltersProps) {
                     style={{
                         width: '100%',
                         padding: '9px 36px 9px 36px',
-                        background: 'var(--bg-elevated)',
-                        border: '1px solid var(--border)',
+                        background: '#ffffff',
+                        border: '1px solid #cbd5e1',
                         borderRadius: '8px',
                         color: 'var(--text-primary)',
                         fontSize: '14px',
                         outline: 'none',
                         boxSizing: 'border-box',
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
                     }}
-                    onFocus={(e) => (e.target.style.borderColor = 'var(--accent-purple)')}
-                    onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+                    onFocus={(e) => {
+                        e.target.style.borderColor = '#0c3e78';
+                        e.target.style.boxShadow = '0 0 0 3px rgba(12, 62, 120, 0.1)';
+                    }}
+                    onBlur={(e) => {
+                        e.target.style.borderColor = '#cbd5e1';
+                        e.target.style.boxShadow = '0 1px 2px rgba(0,0,0,0.03)';
+                    }}
                 />
                 {filters.search && (
                     <button
@@ -115,8 +122,8 @@ export function TaskFiltersBar({ filters, onChange }: TaskFiltersProps) {
                     maxWidth: '100%',
                 }}
             >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginRight: '4px', color: 'var(--text-muted)', fontSize: '12px' }}>
-                    <Filter size={13} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginRight: '4px', color: 'var(--text-secondary)', fontSize: '12px', fontWeight: 600 }}>
+                    <Filter size={13} style={{ color: '#0c3e78' }} />
                     <span>Priority:</span>
                 </div>
                 <button
@@ -126,37 +133,42 @@ export function TaskFiltersBar({ filters, onChange }: TaskFiltersProps) {
                         padding: '5px 12px',
                         borderRadius: '20px',
                         fontSize: '12px',
-                        fontWeight: 500,
+                        fontWeight: 600,
                         cursor: 'pointer',
-                        background: !filters.priority ? 'var(--accent-purple-dim)' : 'var(--bg-elevated)',
-                        border: `1px solid ${!filters.priority ? 'var(--accent-purple)' : 'var(--border)'}`,
-                        color: !filters.priority ? 'var(--accent-purple)' : 'var(--text-secondary)',
+                        background: !filters.priority ? '#0c3e78' : '#ffffff',
+                        border: `1px solid ${!filters.priority ? '#0c3e78' : 'var(--border)'}`,
+                        color: !filters.priority ? '#ffffff' : 'var(--text-secondary)',
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+                        transition: 'all 0.15s ease',
                     }}
                 >
                     All
                 </button>
-                {TASK_PRIORITY.map(({ value, label }) => (
-                    <button
-                        key={value}
-                        id={`filter-priority-${value.toLowerCase()}`}
-                        onClick={() => handlePriority(filters.priority === value ? undefined : (value as TaskPriority))}
-                        style={{
-                            padding: '5px 12px',
-                            borderRadius: '20px',
-                            fontSize: '12px',
-                            fontWeight: 500,
-                            cursor: 'pointer',
-                            background:
-                                filters.priority === value
-                                    ? `rgba(${value === 'LOW' ? '52, 199, 123' : value === 'MEDIUM' ? '245, 158, 11' : '240, 80, 96'}, 0.15)`
-                                    : 'var(--bg-elevated)',
-                            border: `1px solid ${filters.priority === value ? PRIORITY_COLORS[value as TaskPriority] : 'var(--border)'}`,
-                            color: filters.priority === value ? PRIORITY_COLORS[value as TaskPriority] : 'var(--text-secondary)',
-                        }}
-                    >
-                        {label}
-                    </button>
-                ))}
+                {TASK_PRIORITY.map(({ value, label }) => {
+                    const isSelected = filters.priority === value;
+                    const config = PRIORITY_COLORS[value as TaskPriority];
+                    return (
+                        <button
+                            key={value}
+                            id={`filter-priority-${value.toLowerCase()}`}
+                            onClick={() => handlePriority(isSelected ? undefined : (value as TaskPriority))}
+                            style={{
+                                padding: '5px 12px',
+                                borderRadius: '20px',
+                                fontSize: '12px',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                background: isSelected ? config.bg : '#ffffff',
+                                border: `1px solid ${isSelected ? config.border : 'var(--border)'}`,
+                                color: isSelected ? config.color : 'var(--text-secondary)',
+                                boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+                                transition: 'all 0.15s ease',
+                            }}
+                        >
+                            {label}
+                        </button>
+                    );
+                })}
             </div>
         </div>
     );

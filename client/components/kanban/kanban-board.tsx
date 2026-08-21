@@ -146,7 +146,7 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
 
     if (error) {
         return (
-            <div style={{ background: 'rgba(240, 80, 96, 0.1)', border: '1px solid rgba(240, 80, 96, 0.3)', borderRadius: '10px', padding: '16px', color: 'var(--accent-red)' }}>
+            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '10px', padding: '16px', color: 'var(--accent-red)', fontSize: '14px' }}>
                 Failed to load tasks. Please refresh.
             </div>
         );
@@ -178,12 +178,12 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
                                 width: '38px',
                                 height: '38px',
                                 borderRadius: '10px',
-                                background: 'linear-gradient(135deg, var(--accent-purple-dim), rgba(79, 126, 247, 0.15))',
-                                border: '1px solid var(--accent-purple-dim)',
+                                background: 'rgba(12, 62, 120, 0.08)',
+                                border: '1px solid rgba(12, 62, 120, 0.15)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                color: 'var(--accent-purple)',
+                                color: '#0c3e78',
                                 flexShrink: 0,
                             }}
                         >
@@ -217,10 +217,10 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
                                 background: 'var(--bg-elevated)',
                                 padding: '4px 10px',
                                 borderRadius: '20px',
-                                border: '1px solid var(--border-subtle)',
+                                border: '1px solid var(--border)',
                             }}
                         >
-                            <Layers size={13} style={{ color: 'var(--accent-purple)' }} />
+                            <Layers size={13} style={{ color: '#0c3e78' }} />
                             {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'}
                         </span>
                     </div>
@@ -252,7 +252,7 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
                                 style={{
                                     background: 'transparent',
                                     border: 'none',
-                                    color: 'var(--accent-purple)',
+                                    color: '#0c3e78',
                                     fontSize: '12px',
                                     fontWeight: 600,
                                     cursor: 'pointer',

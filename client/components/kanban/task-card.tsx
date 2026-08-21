@@ -9,10 +9,10 @@ import { CSS } from '@dnd-kit/utilities';
 import { MoreHorizontal, Pencil, Trash2, Calendar } from 'lucide-react';
 import type { Task, TaskPriority } from '@/types';
 
-const PRIORITY_CONFIG: Record<TaskPriority, { color: string; bg: string; label: string }> = {
-    LOW: { color: '#34c77b', bg: 'rgba(52, 199, 123, 0.12)', label: 'Low' },
-    MEDIUM: { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)', label: 'Medium' },
-    HIGH: { color: '#f05060', bg: 'rgba(240, 80, 96, 0.12)', label: 'High' },
+const PRIORITY_CONFIG: Record<TaskPriority, { color: string; bg: string; border: string; label: string }> = {
+    LOW: { color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0', label: 'Low' },
+    MEDIUM: { color: '#d97706', bg: '#fffbeb', border: '#fde68a', label: 'Medium' },
+    HIGH: { color: '#dc2626', bg: '#fef2f2', border: '#fecaca', label: 'High' },
 };
 
 interface TaskCardProps {
@@ -41,15 +41,28 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
             ref={setNodeRef}
             style={{
                 ...style,
-                background: isDragOverlay ? 'var(--bg-elevated)' : 'var(--bg-card)',
-                border: `1px solid ${isDragOverlay ? 'var(--accent-purple)' : 'var(--border)'}`,
+                background: '#ffffff',
+                border: `1px solid ${isDragOverlay ? '#0c3e78' : 'var(--border)'}`,
                 borderRadius: '10px',
                 padding: '14px',
                 cursor: isDragOverlay ? 'grabbing' : 'grab',
-                boxShadow: isDragOverlay ? '0 12px 36px rgba(0,0,0,0.6)' : '0 1px 4px rgba(0,0,0,0.2)',
+                boxShadow: isDragOverlay ? '0 12px 30px rgba(12, 62, 120, 0.2)' : '0 1px 3px rgba(0,0,0,0.04)',
                 position: 'relative',
                 userSelect: 'none',
                 touchAction: 'none',
+                transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
+            }}
+            onMouseEnter={(e) => {
+                if (!isDragOverlay) {
+                    (e.currentTarget as HTMLElement).style.borderColor = '#0c3e78';
+                    (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(12, 62, 120, 0.08)';
+                }
+            }}
+            onMouseLeave={(e) => {
+                if (!isDragOverlay) {
+                    (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
+                    (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)';
+                }
             }}
             {...attributes}
             {...listeners}
@@ -59,9 +72,10 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
                 <span
                     style={{
                         fontSize: '11px',
-                        fontWeight: 600,
+                        fontWeight: 700,
                         color: priority.color,
                         background: priority.bg,
+                        border: `1px solid ${priority.border}`,
                         padding: '2px 8px',
                         borderRadius: '20px',
                     }}
@@ -80,8 +94,8 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
                         }}
                         aria-label="Task options"
                         style={{
-                            width: '28px',
-                            height: '28px',
+                            width: '26px',
+                            height: '26px',
                             borderRadius: '6px',
                             background: 'transparent',
                             border: 'none',
@@ -112,12 +126,12 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
                                     top: '100%',
                                     right: 0,
                                     zIndex: 50,
-                                    background: 'var(--bg-elevated)',
+                                    background: '#ffffff',
                                     border: '1px solid var(--border)',
                                     borderRadius: '8px',
                                     minWidth: '130px',
                                     overflow: 'hidden',
-                                    boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+                                    boxShadow: '0 8px 24px rgba(15, 23, 42, 0.12)',
                                 }}
                             >
                                 <button
@@ -133,17 +147,18 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
                                         gap: '8px',
                                         width: '100%',
                                         textAlign: 'left',
-                                        padding: '10px 14px',
+                                        padding: '9px 12px',
                                         background: 'none',
                                         border: 'none',
                                         color: 'var(--text-primary)',
                                         fontSize: '13px',
+                                        fontWeight: 500,
                                         cursor: 'pointer',
                                     }}
-                                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-card)')}
+                                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-elevated)')}
                                     onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
                                 >
-                                    <Pencil size={14} style={{ color: 'var(--accent-purple)' }} />
+                                    <Pencil size={13} style={{ color: '#0c3e78' }} />
                                     Edit
                                 </button>
                                 <button
@@ -159,17 +174,18 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
                                         gap: '8px',
                                         width: '100%',
                                         textAlign: 'left',
-                                        padding: '10px 14px',
+                                        padding: '9px 12px',
                                         background: 'none',
                                         border: 'none',
                                         color: 'var(--accent-red)',
                                         fontSize: '13px',
+                                        fontWeight: 500,
                                         cursor: 'pointer',
                                     }}
-                                    onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(240, 80, 96, 0.08)')}
+                                    onMouseEnter={(e) => (e.currentTarget.style.background = '#fef2f2')}
                                     onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
                                 >
-                                    <Trash2 size={14} />
+                                    <Trash2 size={13} />
                                     Delete
                                 </button>
                             </div>

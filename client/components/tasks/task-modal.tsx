@@ -1,11 +1,11 @@
 'use client';
 
 // components/tasks/task-modal.tsx
-// Centered modal for creating and editing tasks with searchable Assignee combobox and Lucide icons.
+// Centered modal for creating and editing tasks with searchable Assignee combobox (Light Theme).
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { Search, X, Check, User as UserIcon, Plus, Pencil } from 'lucide-react';
+import { Search, X, Check, User as UserIcon, Plus, Pencil, Calendar } from 'lucide-react';
 import { useAuth } from '@/lib/auth/auth-context';
 import { useUsers } from '@/hooks/use-users';
 import type { Task, TaskStatus, TaskPriority, CreateTaskInput, UpdateTaskInput, User } from '@/types';
@@ -139,7 +139,6 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                 setOpen(false);
             }
         }
-
         if (open) {
             document.addEventListener('mousedown', handleOutsideClick);
             window.addEventListener('resize', updatePosition);
@@ -152,99 +151,76 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
         };
     }, [open, updatePosition]);
 
-    // Scroll highlighted item into view
-    useEffect(() => {
-        if (open && listRef.current) {
-            const item = listRef.current.children[highlighted] as HTMLElement | undefined;
-            item?.scrollIntoView({ block: 'nearest' });
-        }
-    }, [highlighted, open]);
-
-    const inputBase: React.CSSProperties = {
-        width: '100%',
-        padding: '11px 13px',
-        background: 'var(--bg-elevated)',
-        border: '1px solid var(--border)',
-        borderRadius: '8px',
-        color: 'var(--text-primary)',
-        fontSize: '14px',
-        outline: 'none',
-        boxSizing: 'border-box',
-        fontFamily: 'inherit',
-    };
-
     function getInitials(name: string) {
         return name
             .split(' ')
-            .filter(Boolean)
-            .map((n) => n[0])
+            .map((p) => p[0])
             .join('')
-            .toUpperCase()
-            .slice(0, 2) || '?';
+            .slice(0, 2)
+            .toUpperCase();
     }
 
     return (
         <div ref={containerRef} style={{ position: 'relative', width: '100%' }}>
-            {/* Selected chip — shown when a user is selected and dropdown is not actively searching */}
             {selectedUser && !open ? (
+                /* Selected Chip */
                 <div
                     style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '8px',
+                        justifyContent: 'space-between',
                         padding: '8px 12px',
-                        background: 'var(--bg-elevated)',
-                        border: '1px solid var(--accent-purple)',
+                        background: '#ffffff',
+                        border: '1px solid #cbd5e1',
                         borderRadius: '8px',
                         cursor: 'pointer',
                         minHeight: '44px',
                         boxSizing: 'border-box',
                     }}
-                    onClick={() => {
-                        handleOpen();
-                        setTimeout(() => inputRef.current?.focus(), 0);
-                    }}
+                    onClick={handleOpen}
                 >
-                    {/* Avatar */}
-                    <div
-                        style={{
-                            width: '24px',
-                            height: '24px',
-                            borderRadius: '50%',
-                            background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '10px',
-                            fontWeight: 700,
-                            color: 'white',
-                            flexShrink: 0,
-                        }}
-                    >
-                        {getInitials(selectedUser.name)}
-                    </div>
-                    <span
-                        style={{
-                            fontSize: '14px',
-                            color: 'var(--text-primary)',
-                            flex: 1,
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                        }}
-                    >
-                        {selectedUser.name}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                        <div
+                            style={{
+                                width: '24px',
+                                height: '24px',
+                                borderRadius: '50%',
+                                background: 'linear-gradient(135deg, #0c3e78, #1e40af)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '10px',
+                                fontWeight: 700,
+                                color: '#ffffff',
+                                flexShrink: 0,
+                            }}
+                        >
+                            {getInitials(selectedUser.name)}
+                        </div>
+                        <span style={{ fontSize: '13.5px', color: 'var(--text-primary)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {selectedUser.name}
+                        </span>
                         {selectedUser.id === currentUserId && (
-                            <span style={{ fontSize: '11px', color: 'var(--text-muted)', marginLeft: '6px' }}>(You)</span>
+                            <span
+                                style={{
+                                    fontSize: '10px',
+                                    color: '#0c3e78',
+                                    background: 'rgba(12, 62, 120, 0.08)',
+                                    padding: '1px 6px',
+                                    borderRadius: '20px',
+                                    fontWeight: 600,
+                                }}
+                            >
+                                You
+                            </span>
                         )}
-                    </span>
+                    </div>
                     <button
                         type="button"
                         onClick={(e) => {
                             e.stopPropagation();
                             clearSelection();
                         }}
-                        aria-label="Clear assignee"
                         style={{
                             background: 'none',
                             border: 'none',
@@ -254,8 +230,8 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            flexShrink: 0,
                         }}
+                        aria-label="Remove assignee"
                     >
                         <X size={14} />
                     </button>
@@ -276,52 +252,31 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                     />
                     <input
                         ref={inputRef}
-                        id="task-assigned-to"
                         type="text"
-                        autoComplete="off"
                         value={query}
-                        placeholder={selectedUser ? selectedUser.name : 'Search by name or email…'}
                         onChange={handleInputChange}
                         onFocus={handleOpen}
                         onKeyDown={handleKeyDown}
+                        placeholder={isLoading ? 'Loading members…' : 'Search members…'}
+                        disabled={isLoading}
                         style={{
-                            ...inputBase,
-                            paddingLeft: '34px',
-                            paddingRight: query ? '32px' : '13px',
-                            borderColor: open ? 'var(--accent-purple)' : 'var(--border)',
+                            width: '100%',
+                            padding: '10px 12px 10px 34px',
+                            background: '#ffffff',
+                            border: `1px solid ${open ? '#0c3e78' : '#cbd5e1'}`,
+                            borderRadius: '8px',
+                            color: 'var(--text-primary)',
+                            fontSize: '13.5px',
+                            outline: 'none',
+                            boxSizing: 'border-box',
+                            minHeight: '44px',
                         }}
                     />
-                    {query && (
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setQuery('');
-                                inputRef.current?.focus();
-                            }}
-                            aria-label="Clear search"
-                            style={{
-                                position: 'absolute',
-                                right: '10px',
-                                top: '50%',
-                                transform: 'translateY(-50%)',
-                                background: 'none',
-                                border: 'none',
-                                cursor: 'pointer',
-                                color: 'var(--text-muted)',
-                                padding: '2px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <X size={14} />
-                        </button>
-                    )}
                 </div>
             )}
 
-            {/* Floating Dropdown — Portaled to document.body */}
-            {mounted && open && createPortal(
+            {/* Portal Dropdown */}
+            {open && mounted && createPortal(
                 <ul
                     ref={listRef}
                     style={{
@@ -329,19 +284,20 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                         top: dropdownCoords.top,
                         left: dropdownCoords.left,
                         width: dropdownCoords.width,
-                        zIndex: 99999,
-                        background: 'var(--bg-elevated)',
+                        maxHeight: '220px',
+                        overflowY: 'auto',
+                        background: '#ffffff',
                         border: '1px solid var(--border)',
                         borderRadius: '10px',
-                        maxHeight: '210px',
-                        overflowY: 'auto',
-                        listStyle: 'none',
+                        boxShadow: '0 12px 30px rgba(15, 23, 42, 0.15)',
+                        zIndex: 99999,
                         margin: 0,
-                        padding: '4px',
-                        boxShadow: '0 20px 48px rgba(0,0,0,0.85)',
+                        padding: '6px',
+                        listStyle: 'none',
+                        boxSizing: 'border-box',
                     }}
                 >
-                    {/* Unassigned Option (Index 0) */}
+                    {/* Option 0: Unassigned */}
                     <li
                         onMouseDown={(e) => {
                             e.preventDefault();
@@ -355,9 +311,8 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                             padding: '8px 10px',
                             borderRadius: '7px',
                             cursor: 'pointer',
-                            background: highlighted === 0 ? 'rgba(130, 80, 255, 0.15)' : !selectedId ? 'rgba(255,255,255,0.04)' : 'transparent',
-                            color: !selectedId ? 'var(--text-primary)' : 'var(--text-muted)',
-                            fontSize: '13px',
+                            background: highlighted === 0 ? '#f1f5f9' : 'transparent',
+                            transition: 'background 0.1s ease',
                         }}
                     >
                         <div
@@ -365,37 +320,26 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                                 width: '26px',
                                 height: '26px',
                                 borderRadius: '50%',
-                                background: 'var(--border)',
+                                background: '#f1f5f9',
+                                border: '1px solid var(--border)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                flexShrink: 0,
                                 color: 'var(--text-muted)',
+                                flexShrink: 0,
                             }}
                         >
                             <UserIcon size={13} />
                         </div>
-                        <span style={{ fontWeight: !selectedId ? 600 : 400 }}>Unassigned</span>
-                        {!selectedId && (
-                            <Check size={14} style={{ marginLeft: 'auto', color: 'var(--accent-purple)' }} />
-                        )}
+                        <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Unassigned</span>
+                        {!selectedId && <Check size={14} style={{ marginLeft: 'auto', color: '#0c3e78' }} />}
                     </li>
 
-                    {isLoading && (
-                        <li style={{ padding: '12px 10px', color: 'var(--text-muted)', fontSize: '13px', textAlign: 'center' }}>
-                            Loading users…
-                        </li>
-                    )}
-
-                    {!isLoading && filtered.length === 0 && (
-                        <li style={{ padding: '12px 10px', color: 'var(--text-muted)', fontSize: '13px', textAlign: 'center' }}>
-                            No users found matching &ldquo;{query}&rdquo;
-                        </li>
-                    )}
-
-                    {!isLoading && filtered.map((u, i) => {
+                    {/* Filtered User List */}
+                    {filtered.map((u, i) => {
                         const isItemHighlighted = highlighted === i + 1;
                         const isItemSelected = u.id === selectedId;
+
                         return (
                             <li
                                 key={u.id}
@@ -412,9 +356,9 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                                     borderRadius: '7px',
                                     cursor: 'pointer',
                                     background: isItemHighlighted
-                                        ? 'rgba(130, 80, 255, 0.18)'
+                                        ? '#f1f5f9'
                                         : isItemSelected
-                                            ? 'rgba(130, 80, 255, 0.08)'
+                                            ? 'rgba(12, 62, 120, 0.05)'
                                             : 'transparent',
                                     transition: 'background 0.1s ease',
                                 }}
@@ -425,13 +369,13 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                                         width: '26px',
                                         height: '26px',
                                         borderRadius: '50%',
-                                        background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
+                                        background: 'linear-gradient(135deg, #0c3e78, #1e40af)',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         fontSize: '10px',
                                         fontWeight: 700,
-                                        color: 'white',
+                                        color: '#ffffff',
                                         flexShrink: 0,
                                     }}
                                 >
@@ -441,7 +385,7 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                                     <div
                                         style={{
                                             fontSize: '13px',
-                                            fontWeight: 500,
+                                            fontWeight: 600,
                                             color: 'var(--text-primary)',
                                             display: 'flex',
                                             alignItems: 'center',
@@ -455,8 +399,8 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                                             <span
                                                 style={{
                                                     fontSize: '10px',
-                                                    color: 'var(--accent-purple)',
-                                                    background: 'rgba(130,80,255,0.15)',
+                                                    color: '#0c3e78',
+                                                    background: 'rgba(12, 62, 120, 0.08)',
                                                     padding: '1px 6px',
                                                     borderRadius: '20px',
                                                     fontWeight: 600,
@@ -466,7 +410,7 @@ function AssigneeCombobox({ users, isLoading, selectedId, currentUserId, onChang
                                             </span>
                                         )}
                                         {isItemSelected && (
-                                            <Check size={14} style={{ marginLeft: 'auto', color: 'var(--accent-purple)' }} />
+                                            <Check size={14} style={{ marginLeft: 'auto', color: '#0c3e78' }} />
                                         )}
                                     </div>
                                     <div
@@ -542,8 +486,8 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
     const inputStyle: React.CSSProperties = {
         width: '100%',
         padding: '11px 13px',
-        background: 'var(--bg-elevated)',
-        border: '1px solid var(--border)',
+        background: '#ffffff',
+        border: '1px solid #cbd5e1',
         borderRadius: '8px',
         color: 'var(--text-primary)',
         fontSize: '14px',
@@ -561,8 +505,8 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
             <div className="modal-content animate-modal">
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        {task ? <Pencil size={18} style={{ color: 'var(--accent-purple)' }} /> : <Plus size={18} style={{ color: 'var(--accent-purple)' }} />}
-                        <h2 style={{ fontSize: '18px', fontWeight: 700 }}>
+                        {task ? <Pencil size={18} style={{ color: '#0c3e78' }} /> : <Plus size={18} style={{ color: '#0c3e78' }} />}
+                        <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>
                             {task ? 'Edit Task' : 'New Task'}
                         </h2>
                     </div>
@@ -585,7 +529,7 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                 </div>
 
                 {error && (
-                    <div style={{ background: 'rgba(240, 80, 96, 0.1)', border: '1px solid rgba(240, 80, 96, 0.3)', borderRadius: '8px', padding: '12px', marginBottom: '16px', color: 'var(--accent-red)', fontSize: '14px' }}>
+                    <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '12px', marginBottom: '16px', color: 'var(--accent-red)', fontSize: '14px' }}>
                         {error}
                     </div>
                 )}
@@ -593,7 +537,7 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                 <form onSubmit={handleSubmit}>
                     {/* Title */}
                     <div style={{ marginBottom: '16px' }}>
-                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '6px' }}>
+                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
                             Title *
                         </label>
                         <input
@@ -604,15 +548,15 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                             autoFocus
                             placeholder="e.g. Implement user authentication flow"
                             style={inputStyle}
-                            onFocus={(e) => (e.target.style.borderColor = 'var(--accent-purple)')}
-                            onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+                            onFocus={(e) => (e.target.style.borderColor = '#0c3e78')}
+                            onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
                         />
                     </div>
 
                     {/* Metadata Section: Status & Priority */}
                     <div className="form-grid-2" style={{ marginBottom: '14px' }}>
                         <div>
-                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '6px' }}>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
                                 Status
                             </label>
                             <select id="task-status" value={status} onChange={(e) => setStatus(e.target.value as TaskStatus)} style={selectStyle}>
@@ -620,7 +564,7 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                             </select>
                         </div>
                         <div>
-                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '6px' }}>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
                                 Priority
                             </label>
                             <select id="task-priority" value={priority} onChange={(e) => setPriority(e.target.value as TaskPriority)} style={selectStyle}>
@@ -632,7 +576,7 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                     {/* Metadata Section: Assign To & Due date */}
                     <div className="form-grid-2" style={{ marginBottom: '16px' }}>
                         <div>
-                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '6px' }}>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
                                 Assign To
                             </label>
                             <AssigneeCombobox
@@ -645,8 +589,8 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                         </div>
 
                         <div>
-                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '6px' }}>
-                                Due date <span style={{ color: 'var(--text-muted)' }}>(optional)</span>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+                                Due date <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional)</span>
                             </label>
                             <input
                                 id="task-due-date"
@@ -661,7 +605,7 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                                 style={{
                                     ...selectStyle,
                                     minHeight: '44px',
-                                    colorScheme: 'dark',
+                                    colorScheme: 'light',
                                     cursor: 'pointer',
                                 }}
                             />
@@ -670,8 +614,8 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
 
                     {/* Description */}
                     <div style={{ marginBottom: '22px' }}>
-                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '6px' }}>
-                            Description <span style={{ color: 'var(--text-muted)' }}>(optional)</span>
+                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+                            Description <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional)</span>
                         </label>
                         <textarea
                             id="task-description"
@@ -680,16 +624,16 @@ export function TaskModal({ task, defaultStatus = 'TODO', onSave, onClose }: Tas
                             placeholder="Details, subtasks, acceptance criteria..."
                             rows={3}
                             style={{ ...inputStyle, resize: 'vertical', fontFamily: 'inherit' }}
-                            onFocus={(e) => (e.target.style.borderColor = 'var(--accent-purple)')}
-                            onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+                            onFocus={(e) => (e.target.style.borderColor = '#0c3e78')}
+                            onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
                         />
                     </div>
 
                     <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                        <button type="button" onClick={onClose} style={{ padding: '10px 18px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', fontSize: '14px', fontWeight: 500, cursor: 'pointer' }}>
+                        <button type="button" onClick={onClose} style={{ padding: '10px 18px', background: '#f1f5f9', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', fontSize: '14px', fontWeight: 500, cursor: 'pointer' }}>
                             Cancel
                         </button>
-                        <button id="task-save" type="submit" disabled={isSaving} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 20px', background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))', border: 'none', borderRadius: '8px', color: 'white', fontSize: '14px', fontWeight: 600, cursor: isSaving ? 'not-allowed' : 'pointer', opacity: isSaving ? 0.7 : 1 }}>
+                        <button id="task-save" type="submit" disabled={isSaving} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 20px', background: '#0c3e78', border: 'none', borderRadius: '8px', color: 'white', fontSize: '14px', fontWeight: 600, cursor: isSaving ? 'not-allowed' : 'pointer', opacity: isSaving ? 0.7 : 1 }}>
                             {task ? <Pencil size={15} /> : <Plus size={15} />}
                             {isSaving ? 'Saving…' : task ? 'Save Changes' : 'Create Task'}
                         </button>

@@ -41,20 +41,20 @@ export function AppNavbar({ breadcrumbs }: AppNavbarProps) {
                                 width: '28px',
                                 height: '28px',
                                 borderRadius: '7px',
-                                background: 'rgba(255, 255, 255, 0.04)',
-                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                background: '#0f294a',
+                                border: '1px solid rgba(15, 41, 74, 0.2)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 overflow: 'hidden',
-                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                                boxShadow: '0 2px 6px rgba(15, 41, 74, 0.15)',
                             }}
                         >
                             <Image
                                 src="/brand/icon.svg"
                                 alt="TaskFlow"
-                                width={20}
-                                height={20}
+                                width={18}
+                                height={18}
                                 priority
                             />
                         </div>
@@ -63,9 +63,10 @@ export function AppNavbar({ breadcrumbs }: AppNavbarProps) {
                             style={{
                                 fontSize: '17px',
                                 color: 'var(--text-primary)',
+                                fontWeight: 800,
                             }}
                         >
-                            TaskFlow
+                            Task<span style={{ color: '#0c3e78' }}>Flow</span>
                         </span>
                     </Link>
 
@@ -171,14 +172,14 @@ export function AppNavbar({ breadcrumbs }: AppNavbarProps) {
                                     width: '28px',
                                     height: '28px',
                                     borderRadius: '50%',
-                                    background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
+                                    background: 'linear-gradient(135deg, #0c3e78, #1e40af)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     fontSize: '11px',
                                     fontWeight: 700,
                                     color: '#ffffff',
-                                    boxShadow: '0 2px 6px rgba(124, 106, 247, 0.35)',
+                                    boxShadow: '0 2px 6px rgba(12, 62, 120, 0.25)',
                                     flexShrink: 0,
                                 }}
                             >
@@ -190,7 +191,7 @@ export function AppNavbar({ breadcrumbs }: AppNavbarProps) {
                                 className="nav-user-label"
                                 style={{
                                     fontSize: '13px',
-                                    fontWeight: 500,
+                                    fontWeight: 600,
                                     color: 'var(--text-primary)',
                                     maxWidth: '140px',
                                     overflow: 'hidden',
@@ -212,24 +213,25 @@ export function AppNavbar({ breadcrumbs }: AppNavbarProps) {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '6px',
-                            padding: '6px 10px',
-                            background: 'rgba(255, 255, 255, 0.03)',
-                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                            padding: '6px 12px',
+                            background: '#ffffff',
+                            border: '1px solid var(--border)',
                             borderRadius: '8px',
                             color: 'var(--text-secondary)',
                             fontSize: '13px',
                             fontWeight: 500,
                             cursor: 'pointer',
                             transition: 'all 0.15s ease',
+                            boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
                         }}
                         onMouseEnter={(e) => {
-                            e.currentTarget.style.background = 'rgba(240, 80, 96, 0.1)';
-                            e.currentTarget.style.borderColor = 'rgba(240, 80, 96, 0.3)';
+                            e.currentTarget.style.background = '#fef2f2';
+                            e.currentTarget.style.borderColor = '#fecaca';
                             e.currentTarget.style.color = 'var(--accent-red)';
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
-                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                            e.currentTarget.style.background = '#ffffff';
+                            e.currentTarget.style.borderColor = 'var(--border)';
                             e.currentTarget.style.color = 'var(--text-secondary)';
                         }}
                     >

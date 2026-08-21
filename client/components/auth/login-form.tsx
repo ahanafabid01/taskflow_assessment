@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Mail, Lock, Eye, EyeOff, AlertCircle, Check } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/lib/auth/auth-context';
 import { loginApi } from '@/lib/api/auth';
 import { ApiRequestError } from '@/lib/api/client';
@@ -31,7 +31,6 @@ export function LoginForm() {
     const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
     const router = useRouter();
-
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -60,7 +59,7 @@ export function LoginForm() {
             {/* Left Hero Sidebar — Visible on Desktop/Tablet */}
             <aside className="auth-hero-sidebar">
                 <div className="auth-hero-glow" />
-                
+
                 {/* Brand Logo & Suite Tagline */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 2 }}>
                     <div
@@ -83,7 +82,7 @@ export function LoginForm() {
                     <div>
                         <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
                             <span style={{ fontSize: '22px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.03em', fontFamily: 'Outfit, sans-serif' }}>
-                                Task<span style={{ color: '#f59e0b' }}>Flow</span>
+                                Task<span style={{ color: '#38bdf8' }}>Flow</span>
                             </span>
                         </div>
                         <span style={{ display: 'block', fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', color: 'rgba(255, 255, 255, 0.65)', textTransform: 'uppercase' }}>
@@ -151,7 +150,7 @@ export function LoginForm() {
                             </div>
                             <div style={{ textAlign: 'left' }}>
                                 <div style={{ fontSize: '22px', fontWeight: 800, color: '#0f294a', letterSpacing: '-0.02em', fontFamily: 'Outfit, sans-serif', lineHeight: 1.1 }}>
-                                    Task<span style={{ color: '#7c6af7' }}>Flow</span>
+                                    Task<span style={{ color: '#0c3e78' }}>Flow</span>
                                 </div>
                                 <span style={{ display: 'block', fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.12em', color: '#64748b', textTransform: 'uppercase', marginTop: '2px' }}>
                                     TASK SUITE
@@ -267,7 +266,7 @@ export function LoginForm() {
                                     style={{
                                         fontSize: '12px',
                                         fontWeight: 500,
-                                        color: '#0d47a1',
+                                        color: '#0c3e78',
                                         cursor: 'pointer',
                                     }}
                                     onClick={() => alert('Please contact your administrator to reset your password.')}
@@ -348,14 +347,14 @@ export function LoginForm() {
                         <span className="auth-divider-line" />
                     </div>
 
-                    {/* Product Walkthrough / Register Switch */}
+                    {/* Register Redirect */}
                     <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                         <p style={{ fontSize: '13px', color: '#475467', margin: 0 }}>
                             Don&apos;t have an account?{' '}
                             <Link
                                 href="/register"
                                 style={{
-                                    color: '#0d47a1',
+                                    color: '#0c3e78',
                                     fontWeight: 700,
                                     textDecoration: 'none',
                                 }}
@@ -378,4 +377,3 @@ export function LoginForm() {
         </div>
     );
 }
-

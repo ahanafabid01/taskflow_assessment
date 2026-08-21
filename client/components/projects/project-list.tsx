@@ -1,7 +1,7 @@
 'use client';
 
 // components/projects/project-list.tsx
-// Responsive projects overview page with brand logo, professional Lucide icons, and Card/Table view switcher.
+// Responsive projects overview page with brand logo, professional Lucide icons, and Card/Table view switcher (Light Theme).
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -34,7 +34,7 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
             onMouseEnter={(e) => {
                 (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent-purple)';
                 (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(124, 106, 247, 0.15)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(12, 62, 120, 0.09)';
             }}
             onMouseLeave={(e) => {
                 (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
@@ -49,12 +49,12 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
                             width: '40px',
                             height: '40px',
                             borderRadius: '10px',
-                            background: 'linear-gradient(135deg, var(--accent-purple-dim), rgba(79, 126, 247, 0.15))',
-                            border: '1px solid var(--accent-purple-dim)',
+                            background: 'rgba(12, 62, 120, 0.08)',
+                            border: '1px solid rgba(12, 62, 120, 0.15)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            color: 'var(--accent-purple)',
+                            color: '#0c3e78',
                             flexShrink: 0,
                         }}
                     >
@@ -66,12 +66,12 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
                             alignItems: 'center',
                             gap: '5px',
                             fontSize: '12px',
-                            fontWeight: 500,
+                            fontWeight: 600,
                             color: 'var(--text-secondary)',
                             background: 'var(--bg-elevated)',
                             padding: '3px 10px',
                             borderRadius: '20px',
-                            border: '1px solid var(--border-subtle)',
+                            border: '1px solid var(--border)',
                         }}
                     >
                         <CheckSquare size={12} />
@@ -82,7 +82,7 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
                 <h3
                     style={{
                         fontSize: '16px',
-                        fontWeight: 600,
+                        fontWeight: 700,
                         color: 'var(--text-primary)',
                         marginBottom: '6px',
                         overflow: 'hidden',
@@ -97,7 +97,7 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
                         style={{
                             fontSize: '13px',
                             color: 'var(--text-secondary)',
-                            lineHeight: 1.4,
+                            lineHeight: 1.45,
                             marginBottom: '12px',
                             display: '-webkit-box',
                             WebkitLineClamp: 2,
@@ -116,19 +116,19 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
                         width: '22px',
                         height: '22px',
                         borderRadius: '50%',
-                        background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
+                        background: 'linear-gradient(135deg, #0c3e78, #1e40af)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontSize: '10px',
                         fontWeight: 700,
-                        color: 'white',
+                        color: '#ffffff',
                         flexShrink: 0,
                     }}
                 >
                     {project.owner.name.charAt(0).toUpperCase()}
                 </div>
-                <span style={{ fontSize: '12px', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {project.owner.name}
                 </span>
             </div>
@@ -151,7 +151,7 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
             <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
                     <thead>
-                        <tr style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border)' }}>
+                        <tr style={{ background: '#f8fafc', borderBottom: '1px solid var(--border)' }}>
                             <th style={{ padding: '14px 18px', fontSize: '11.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                 Project
                             </th>
@@ -188,9 +188,10 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
                                         cursor: 'pointer',
                                         transition: 'background 0.15s ease',
                                     }}
-                                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-elevated)')}
+                                    onMouseEnter={(e) => (e.currentTarget.style.background = '#f8fafc')}
                                     onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                                 >
+                                    {/* Project Name */}
                                     <td style={{ padding: '14px 18px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                             <div
@@ -198,12 +199,12 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
                                                     width: '32px',
                                                     height: '32px',
                                                     borderRadius: '8px',
-                                                    background: 'linear-gradient(135deg, var(--accent-purple-dim), rgba(79, 126, 247, 0.15))',
-                                                    border: '1px solid var(--accent-purple-dim)',
+                                                    background: 'rgba(12, 62, 120, 0.08)',
+                                                    border: '1px solid rgba(12, 62, 120, 0.15)',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
-                                                    color: 'var(--accent-purple)',
+                                                    color: '#0c3e78',
                                                     flexShrink: 0,
                                                 }}
                                             >
@@ -215,6 +216,7 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
                                         </div>
                                     </td>
 
+                                    {/* Description */}
                                     <td style={{ padding: '14px 18px', maxWidth: '240px' }}>
                                         <span
                                             style={{
@@ -232,6 +234,7 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
                                         </span>
                                     </td>
 
+                                    {/* Task Count */}
                                     <td style={{ padding: '14px 18px', whiteSpace: 'nowrap' }}>
                                         <span
                                             style={{
@@ -239,12 +242,12 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
                                                 alignItems: 'center',
                                                 gap: '5px',
                                                 fontSize: '12px',
-                                                fontWeight: 500,
+                                                fontWeight: 600,
                                                 color: 'var(--text-secondary)',
                                                 background: 'var(--bg-elevated)',
                                                 padding: '2px 8px',
                                                 borderRadius: '20px',
-                                                border: '1px solid var(--border-subtle)',
+                                                border: '1px solid var(--border)',
                                             }}
                                         >
                                             <CheckSquare size={12} />
@@ -252,6 +255,7 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
                                         </span>
                                     </td>
 
+                                    {/* Owner */}
                                     <td style={{ padding: '14px 18px', whiteSpace: 'nowrap' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                             <div
@@ -259,13 +263,13 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
                                                     width: '22px',
                                                     height: '22px',
                                                     borderRadius: '50%',
-                                                    background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
+                                                    background: 'linear-gradient(135deg, #0c3e78, #1e40af)',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
                                                     fontSize: '10px',
                                                     fontWeight: 700,
-                                                    color: 'white',
+                                                    color: '#ffffff',
                                                     flexShrink: 0,
                                                 }}
                                             >
@@ -277,10 +281,12 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
                                         </div>
                                     </td>
 
+                                    {/* Created Date */}
                                     <td style={{ padding: '14px 18px', fontSize: '12.5px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
                                         {createdDate}
                                     </td>
 
+                                    {/* Action */}
                                     <td style={{ padding: '14px 18px', textAlign: 'right', whiteSpace: 'nowrap' }}>
                                         <span
                                             style={{
@@ -289,10 +295,10 @@ function ProjectTableView({ projects, onSelect }: { projects: Project[]; onSelec
                                                 gap: '4px',
                                                 fontSize: '12px',
                                                 fontWeight: 600,
-                                                color: 'var(--accent-purple)',
+                                                color: '#0c3e78',
                                                 padding: '4px 8px',
                                                 borderRadius: '6px',
-                                                background: 'rgba(124, 106, 247, 0.1)',
+                                                background: 'rgba(12, 62, 120, 0.08)',
                                             }}
                                         >
                                             Open Board <ChevronRight size={13} />
@@ -335,8 +341,8 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
             <div className="modal-content animate-modal">
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <FolderPlus size={20} style={{ color: 'var(--accent-purple)' }} />
-                        <h2 style={{ fontSize: '18px', fontWeight: 700 }}>Create New Project</h2>
+                        <FolderPlus size={20} style={{ color: '#0c3e78' }} />
+                        <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>Create New Project</h2>
                     </div>
                     <button
                         onClick={onClose}
@@ -357,13 +363,13 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
                 </div>
 
                 {error && (
-                    <div style={{ background: 'rgba(240, 80, 96, 0.1)', border: '1px solid rgba(240, 80, 96, 0.3)', borderRadius: '8px', padding: '12px', marginBottom: '16px', color: 'var(--accent-red)', fontSize: '14px' }}>
+                    <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '12px', marginBottom: '16px', color: 'var(--accent-red)', fontSize: '14px' }}>
                         {error}
                     </div>
                 )}
                 <form onSubmit={handleSubmit}>
                     <div style={{ marginBottom: '16px' }}>
-                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '8px' }}>
+                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
                             Project name *
                         </label>
                         <input
@@ -373,14 +379,14 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
                             onChange={(e) => setTitle(e.target.value)}
                             placeholder="e.g. Mobile App Redesign"
                             autoFocus
-                            style={{ width: '100%', padding: '12px 14px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-primary)', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
-                            onFocus={(e) => (e.target.style.borderColor = 'var(--accent-purple)')}
-                            onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+                            style={{ width: '100%', padding: '12px 14px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', color: 'var(--text-primary)', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
+                            onFocus={(e) => (e.target.style.borderColor = '#0c3e78')}
+                            onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
                         />
                     </div>
                     <div style={{ marginBottom: '24px' }}>
-                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '8px' }}>
-                            Description <span style={{ color: 'var(--text-muted)' }}>(optional)</span>
+                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
+                            Description <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional)</span>
                         </label>
                         <textarea
                             id="new-project-description"
@@ -388,16 +394,16 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Project goals, scope, criteria..."
                             rows={3}
-                            style={{ width: '100%', padding: '12px 14px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-primary)', fontSize: '14px', outline: 'none', resize: 'vertical', fontFamily: 'inherit', boxSizing: 'border-box' }}
-                            onFocus={(e) => (e.target.style.borderColor = 'var(--accent-purple)')}
-                            onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+                            style={{ width: '100%', padding: '12px 14px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', color: 'var(--text-primary)', fontSize: '14px', outline: 'none', resize: 'vertical', fontFamily: 'inherit', boxSizing: 'border-box' }}
+                            onFocus={(e) => (e.target.style.borderColor = '#0c3e78')}
+                            onBlur={(e) => (e.target.style.borderColor = '#cbd5e1')}
                         />
                     </div>
                     <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                        <button type="button" onClick={onClose} style={{ padding: '10px 18px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', fontSize: '14px', fontWeight: 500, cursor: 'pointer' }}>
+                        <button type="button" onClick={onClose} style={{ padding: '10px 18px', background: '#f1f5f9', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', fontSize: '14px', fontWeight: 500, cursor: 'pointer' }}>
                             Cancel
                         </button>
-                        <button id="create-project-submit" type="submit" disabled={isPending} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 20px', background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))', border: 'none', borderRadius: '8px', color: 'white', fontSize: '14px', fontWeight: 600, cursor: isPending ? 'not-allowed' : 'pointer', opacity: isPending ? 0.7 : 1 }}>
+                        <button id="create-project-submit" type="submit" disabled={isPending} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 20px', background: '#0c3e78', border: 'none', borderRadius: '8px', color: 'white', fontSize: '14px', fontWeight: 600, cursor: isPending ? 'not-allowed' : 'pointer', opacity: isPending ? 0.7 : 1 }}>
                             <Plus size={16} />
                             {isPending ? 'Creating…' : 'Create Project'}
                         </button>
@@ -431,7 +437,7 @@ export function ProjectList() {
     }
 
     return (
-        <div style={{ minHeight: '100dvh', background: 'radial-gradient(ellipse at top, rgba(124, 106, 247, 0.05) 0%, var(--bg-primary) 50%)', width: '100%', overflowX: 'hidden' }}>
+        <div style={{ minHeight: '100dvh', background: 'var(--bg-primary)', width: '100%', overflowX: 'hidden' }}>
             {/* Navigation */}
             <AppNavbar />
 
@@ -439,7 +445,7 @@ export function ProjectList() {
                 {/* Header */}
                 <div className="page-header">
                     <div>
-                        <h1 style={{ fontSize: 'clamp(22px, 4vw, 30px)', fontWeight: 800, marginBottom: '4px' }}>Projects</h1>
+                        <h1 style={{ fontSize: 'clamp(22px, 4vw, 30px)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '4px', letterSpacing: '-0.025em' }}>Projects</h1>
                         <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
                             {pagination?.total ?? 0} {(pagination?.total ?? 0) === 1 ? 'project' : 'projects'} total
                         </p>
@@ -453,11 +459,12 @@ export function ProjectList() {
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                background: 'var(--bg-elevated)',
+                                background: '#ffffff',
                                 border: '1px solid var(--border)',
                                 borderRadius: '10px',
                                 padding: '3px',
                                 gap: '3px',
+                                boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
                             }}
                         >
                             <button
@@ -473,7 +480,7 @@ export function ProjectList() {
                                     padding: '7px 12px',
                                     borderRadius: '7px',
                                     border: 'none',
-                                    background: viewMode === 'grid' ? 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))' : 'transparent',
+                                    background: viewMode === 'grid' ? '#0c3e78' : 'transparent',
                                     color: viewMode === 'grid' ? '#ffffff' : 'var(--text-secondary)',
                                     fontSize: '13px',
                                     fontWeight: 600,
@@ -497,7 +504,7 @@ export function ProjectList() {
                                     padding: '7px 12px',
                                     borderRadius: '7px',
                                     border: 'none',
-                                    background: viewMode === 'table' ? 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))' : 'transparent',
+                                    background: viewMode === 'table' ? '#0c3e78' : 'transparent',
                                     color: viewMode === 'table' ? '#ffffff' : 'var(--text-secondary)',
                                     fontSize: '13px',
                                     fontWeight: 600,
@@ -520,13 +527,14 @@ export function ProjectList() {
                                 justifyContent: 'center',
                                 gap: '8px',
                                 padding: '10px 18px',
-                                background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
+                                background: '#0c3e78',
                                 border: 'none',
                                 borderRadius: '10px',
                                 color: 'white',
                                 fontSize: '14px',
                                 fontWeight: 600,
                                 cursor: 'pointer',
+                                boxShadow: '0 1px 3px rgba(12, 62, 120, 0.2)',
                             }}
                         >
                             <Plus size={16} /> New Project
@@ -535,7 +543,7 @@ export function ProjectList() {
                 </div>
 
                 {error && (
-                    <div style={{ background: 'rgba(240, 80, 96, 0.1)', border: '1px solid rgba(240, 80, 96, 0.3)', borderRadius: '10px', padding: '16px', marginBottom: '24px', color: 'var(--accent-red)' }}>
+                    <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '10px', padding: '16px', marginBottom: '24px', color: 'var(--accent-red)' }}>
                         Failed to load projects. Please refresh.
                     </div>
                 )}
@@ -545,7 +553,7 @@ export function ProjectList() {
                         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px', color: 'var(--text-muted)' }}>
                             <Layers size={48} />
                         </div>
-                        <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '6px' }}>No projects yet</h3>
+                        <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>No projects yet</h3>
                         <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '20px' }}>Create your first project to get started</p>
                         <button
                             onClick={() => setShowModal(true)}
@@ -554,7 +562,7 @@ export function ProjectList() {
                                 alignItems: 'center',
                                 gap: '8px',
                                 padding: '11px 22px',
-                                background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
+                                background: '#0c3e78',
                                 border: 'none',
                                 borderRadius: '10px',
                                 color: 'white',
@@ -589,7 +597,7 @@ export function ProjectList() {
                             type="button"
                             onClick={() => setPage((current) => Math.max(1, current - 1))}
                             disabled={pagination.page === 1}
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '9px 13px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', cursor: pagination.page === 1 ? 'not-allowed' : 'pointer', opacity: pagination.page === 1 ? 0.5 : 1 }}
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '9px 13px', background: '#ffffff', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', cursor: pagination.page === 1 ? 'not-allowed' : 'pointer', opacity: pagination.page === 1 ? 0.5 : 1, boxShadow: '0 1px 2px rgba(0,0,0,0.03)' }}
                         >
                             <ChevronLeft size={16} /> Previous
                         </button>
@@ -600,7 +608,7 @@ export function ProjectList() {
                             type="button"
                             onClick={() => setPage((current) => Math.min(pagination.totalPages, current + 1))}
                             disabled={pagination.page === pagination.totalPages}
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '9px 13px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', cursor: pagination.page === pagination.totalPages ? 'not-allowed' : 'pointer', opacity: pagination.page === pagination.totalPages ? 0.5 : 1 }}
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '9px 13px', background: '#ffffff', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', cursor: pagination.page === pagination.totalPages ? 'not-allowed' : 'pointer', opacity: pagination.page === pagination.totalPages ? 0.5 : 1, boxShadow: '0 1px 2px rgba(0,0,0,0.03)' }}
                         >
                             Next <ChevronRight size={16} />
                         </button>

@@ -63,7 +63,7 @@ export function RegisterForm() {
             {/* Left Hero Sidebar — Visible on Desktop/Tablet */}
             <aside className="auth-hero-sidebar">
                 <div className="auth-hero-glow" />
-                
+
                 {/* Brand Logo & Suite Tagline */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 2 }}>
                     <div
@@ -86,11 +86,11 @@ export function RegisterForm() {
                     <div>
                         <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
                             <span style={{ fontSize: '22px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.03em', fontFamily: 'Outfit, sans-serif' }}>
-                                Task<span style={{ color: '#7c6af7' }}>Flow</span>
+                                Task<span style={{ color: '#38bdf8' }}>Flow</span>
                             </span>
                         </div>
                         <span style={{ display: 'block', fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', color: 'rgba(255, 255, 255, 0.65)', textTransform: 'uppercase' }}>
-                            TASK SUITE
+                            ENTERPRISE SUITE
                         </span>
                     </div>
                 </div>
@@ -154,7 +154,7 @@ export function RegisterForm() {
                             </div>
                             <div style={{ textAlign: 'left' }}>
                                 <div style={{ fontSize: '22px', fontWeight: 800, color: '#0f294a', letterSpacing: '-0.02em', fontFamily: 'Outfit, sans-serif', lineHeight: 1.1 }}>
-                                    Task<span style={{ color: '#7c6af7' }}>Flow</span>
+                                    Task<span style={{ color: '#0c3e78' }}>Flow</span>
                                 </div>
                                 <span style={{ display: 'block', fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.12em', color: '#64748b', textTransform: 'uppercase', marginTop: '2px' }}>
                                     TASK SUITE
@@ -177,7 +177,7 @@ export function RegisterForm() {
                             Create an account
                         </h1>
                         <p style={{ color: '#64748b', fontSize: '13.5px', margin: 0 }}>
-                            Enter your details to get started with your workspace
+                            Start collaborating with your team on TaskFlow
                         </p>
                     </div>
 
@@ -203,8 +203,8 @@ export function RegisterForm() {
                     )}
 
                     <form onSubmit={handleSubmit} noValidate>
-                        {/* Full Name Field */}
-                        <div style={{ marginBottom: '18px' }}>
+                        {/* Name Field */}
+                        <div style={{ marginBottom: '16px' }}>
                             <label
                                 htmlFor="register-name"
                                 style={{
@@ -236,7 +236,7 @@ export function RegisterForm() {
                                     type="text"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    placeholder="Alice Johnson"
+                                    placeholder="Jane Doe"
                                     autoComplete="name"
                                     className="auth-input"
                                     style={{
@@ -252,7 +252,7 @@ export function RegisterForm() {
                         </div>
 
                         {/* Email Field */}
-                        <div style={{ marginBottom: '18px' }}>
+                        <div style={{ marginBottom: '16px' }}>
                             <label
                                 htmlFor="register-email"
                                 style={{
@@ -300,7 +300,7 @@ export function RegisterForm() {
                         </div>
 
                         {/* Password Field */}
-                        <div style={{ marginBottom: '18px' }}>
+                        <div style={{ marginBottom: '20px' }}>
                             <label
                                 htmlFor="register-password"
                                 style={{
@@ -332,7 +332,7 @@ export function RegisterForm() {
                                     type={showPassword ? 'text' : 'password'}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="8+ characters"
+                                    placeholder="Min. 8 characters"
                                     autoComplete="new-password"
                                     className="auth-input"
                                     style={{
@@ -369,15 +369,14 @@ export function RegisterForm() {
                             )}
                         </div>
 
-                        {/* Sign In Primary Button */}
+                        {/* Register Primary Button */}
                         <button
                             id="register-submit"
                             type="submit"
                             disabled={isLoading}
                             className="auth-primary-button"
-                            style={{ marginTop: '6px' }}
                         >
-                            {isLoading ? 'Creating account…' : 'Create account'}
+                            {isLoading ? 'Creating account…' : 'Create Account'}
                         </button>
                     </form>
 
@@ -388,14 +387,14 @@ export function RegisterForm() {
                         <span className="auth-divider-line" />
                     </div>
 
-                    {/* Product Walkthrough / Login Switch */}
+                    {/* Login Redirect */}
                     <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                         <p style={{ fontSize: '13px', color: '#475467', margin: 0 }}>
                             Already have an account?{' '}
                             <Link
                                 href="/login"
                                 style={{
-                                    color: '#0d47a1',
+                                    color: '#0c3e78',
                                     fontWeight: 700,
                                     textDecoration: 'none',
                                 }}
@@ -408,7 +407,7 @@ export function RegisterForm() {
                     {/* Footer Legal Terms */}
                     <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '18px', textAlign: 'center' }}>
                         <p style={{ fontSize: '11px', color: '#94a3b8', margin: 0, lineHeight: 1.5 }}>
-                            By creating an account, you agree to our{' '}
+                            By signing up, you agree to our{' '}
                             <span style={{ color: '#475467', fontWeight: 600, cursor: 'pointer' }}>Terms</span> and{' '}
                             <span style={{ color: '#475467', fontWeight: 600, cursor: 'pointer' }}>Privacy Policy</span>
                         </p>
@@ -418,5 +417,3 @@ export function RegisterForm() {
         </div>
     );
 }
-
-

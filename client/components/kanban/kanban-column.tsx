@@ -11,11 +11,11 @@ import type { Task, TaskStatus } from '@/types';
 
 const COLUMN_CONFIG: Record<
     TaskStatus,
-    { label: string; color: string; accent: string; icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }> }
+    { label: string; color: string; badgeBg: string; icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }> }
 > = {
-    TODO: { label: 'To Do', color: 'var(--text-secondary)', accent: 'var(--border)', icon: CircleDot },
-    IN_PROGRESS: { label: 'In Progress', color: 'var(--accent-purple)', accent: 'var(--accent-purple-dim)', icon: Clock },
-    DONE: { label: 'Done', color: 'var(--accent-green)', accent: 'rgba(52, 199, 123, 0.15)', icon: CheckCircle2 },
+    TODO: { label: 'To Do', color: '#475467', badgeBg: '#e2e8f0', icon: CircleDot },
+    IN_PROGRESS: { label: 'In Progress', color: '#0c3e78', badgeBg: 'rgba(12, 62, 120, 0.1)', icon: Clock },
+    DONE: { label: 'Done', color: '#16a34a', badgeBg: 'rgba(22, 163, 74, 0.1)', icon: CheckCircle2 },
 };
 
 interface KanbanColumnProps {
@@ -36,8 +36,8 @@ export function KanbanColumn({ status, tasks, onEditTask, onDeleteTask, onAddTas
             ref={setNodeRef}
             className="kanban-col"
             style={{
-                background: isOver ? 'rgba(124, 106, 247, 0.05)' : 'var(--bg-secondary)',
-                border: `1px solid ${isOver ? 'var(--accent-purple)' : 'var(--border)'}`,
+                background: isOver ? 'rgba(12, 62, 120, 0.04)' : '#f1f5f9',
+                border: `1px solid ${isOver ? '#0c3e78' : 'var(--border)'}`,
                 borderRadius: 'var(--radius-lg)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -47,19 +47,19 @@ export function KanbanColumn({ status, tasks, onEditTask, onDeleteTask, onAddTas
             }}
         >
             {/* Column Header */}
-            <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border-subtle)' }}>
+            <div style={{ padding: '14px 16px', borderBottom: '1px solid #e2e8f0' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <IconComponent size={15} style={{ color: config.color }} />
-                        <span style={{ fontSize: '14px', fontWeight: 600, color: config.color }}>{config.label}</span>
+                        <IconComponent size={16} style={{ color: config.color }} />
+                        <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>{config.label}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span
                             style={{
                                 fontSize: '12px',
-                                fontWeight: 600,
+                                fontWeight: 700,
                                 color: config.color,
-                                background: config.accent,
+                                background: config.badgeBg,
                                 padding: '2px 8px',
                                 borderRadius: '12px',
                             }}
@@ -71,27 +71,28 @@ export function KanbanColumn({ status, tasks, onEditTask, onDeleteTask, onAddTas
                             onClick={onAddTask}
                             title={`Add task to ${config.label}`}
                             style={{
-                                width: '28px',
-                                height: '28px',
+                                width: '26px',
+                                height: '26px',
                                 borderRadius: '6px',
-                                background: 'var(--bg-elevated)',
+                                background: '#ffffff',
                                 border: '1px solid var(--border)',
                                 color: 'var(--text-secondary)',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
+                                boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
                             }}
                             onMouseEnter={(e) => {
-                                (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent-purple)';
-                                (e.currentTarget as HTMLElement).style.color = 'var(--accent-purple)';
+                                (e.currentTarget as HTMLElement).style.borderColor = '#0c3e78';
+                                (e.currentTarget as HTMLElement).style.color = '#0c3e78';
                             }}
                             onMouseLeave={(e) => {
                                 (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
                                 (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)';
                             }}
                         >
-                            <Plus size={15} />
+                            <Plus size={14} />
                         </button>
                     </div>
                 </div>
@@ -119,22 +120,25 @@ export function KanbanColumn({ status, tasks, onEditTask, onDeleteTask, onAddTas
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '6px',
-                            padding: '24px 16px',
+                            minHeight: '120px',
+                            border: '1px dashed #cbd5e1',
+                            borderRadius: 'var(--radius)',
                             color: 'var(--text-muted)',
-                            fontSize: '13px',
-                            textAlign: 'center',
-                            border: '2px dashed var(--border-subtle)',
-                            borderRadius: '10px',
-                            marginTop: '4px',
                             cursor: 'pointer',
-                            transition: 'border-color 0.15s ease',
+                            transition: 'all 0.15s ease',
+                            background: '#ffffff',
                         }}
-                        onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--accent-purple)')}
-                        onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--border-subtle)')}
+                        onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.borderColor = '#0c3e78';
+                            (e.currentTarget as HTMLElement).style.color = '#0c3e78';
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.borderColor = '#cbd5e1';
+                            (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)';
+                        }}
                     >
-                        <Plus size={20} style={{ color: 'var(--text-muted)' }} />
-                        <span>Click to add a task</span>
+                        <Plus size={18} style={{ marginBottom: '6px' }} />
+                        <span style={{ fontSize: '13px', fontWeight: 500 }}>Click to add a task</span>
                     </div>
                 )}
             </div>
