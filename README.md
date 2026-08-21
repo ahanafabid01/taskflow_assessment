@@ -131,7 +131,7 @@ Authorization: Bearer <token>
 | DELETE | `/api/tasks/:id` | Delete a task (project owner) |
 | GET | `/api/users` | List users for task assignment |
 
-See [API_DOCUMENTATION.md](API_DOCUMENTATION.md) for request examples and error behavior.
+See [API_DOCUMENTATION.md](API_DOCUMENTATION.md) for request examples and error behavior, or import [TaskFlow_Postman_Collection.json](TaskFlow_Postman_Collection.json) into Postman.
 
 ## Project structure
 
