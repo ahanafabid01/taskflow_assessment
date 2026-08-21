@@ -120,6 +120,7 @@ export interface TaskFilters {
 export const QUERY_KEYS = {
   projects: ['projects'] as const,
   projectsFiltered: (filters: ProjectFilters) => ['projects', filters] as const,
+  project: (projectId: string) => ['projects', projectId] as const,
   projectTasks: (projectId: string) => ['projects', projectId, 'tasks'] as const,
   projectTasksFiltered: (projectId: string, filters: TaskFilters) =>
     ['projects', projectId, 'tasks', filters] as const,

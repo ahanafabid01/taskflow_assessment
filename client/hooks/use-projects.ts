@@ -2,7 +2,7 @@
 // TanStack Query hooks for project data fetching and mutation.
 
 import { keepPreviousData, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getProjectsApi, createProjectApi } from '@/lib/api/projects';
+import { getProjectsApi, getProjectApi, createProjectApi } from '@/lib/api/projects';
 import { QUERY_KEYS } from '@/types';
 import type { CreateProjectInput, ProjectFilters } from '@/types';
 
@@ -11,6 +11,14 @@ export function useProjects(filters: ProjectFilters = {}) {
         queryKey: QUERY_KEYS.projectsFiltered(filters),
         queryFn: () => getProjectsApi(filters),
         placeholderData: keepPreviousData,
+    });
+}
+
+export function useProject(projectId: string) {
+    return useQuery({
+        queryKey: QUERY_KEYS.project(projectId),
+        queryFn: () => getProjectApi(projectId),
+        enabled: Boolean(projectId),
     });
 }
 

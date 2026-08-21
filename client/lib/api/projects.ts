@@ -15,3 +15,7 @@ export function getProjectsApi(filters: ProjectFilters = {}): Promise<ProjectPag
 export function createProjectApi(data: CreateProjectInput): Promise<Project> {
     return apiClient.post<Project>('/api/projects', data);
 }
+
+export function getProjectApi(id: string): Promise<Project> {
+    return apiClient.get<Project>(`/api/projects/${id}`);
+}

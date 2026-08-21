@@ -1,8 +1,9 @@
 // lib/api/client.ts
 // Centralized API client — handles base URL, auth headers, JSON parsing, and error responses.
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 import { TOKEN_KEY, UNAUTHORIZED_EVENT } from '@/lib/auth/session';
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
 interface ApiError {
     error: { message: string };

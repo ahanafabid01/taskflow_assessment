@@ -21,6 +21,7 @@ import { TaskCard } from './task-card';
 import { TaskModal } from '../tasks/task-modal';
 import { TaskFiltersBar } from '../tasks/task-filters';
 import { useProjectTasks, useCreateTask, useUpdateTask, useDeleteTask } from '@/hooks/use-tasks';
+import { useProject } from '@/hooks/use-projects';
 import type { Task, TaskStatus, TaskFilters, CreateTaskInput, UpdateTaskInput } from '@/types';
 
 const STATUSES: TaskStatus[] = ['TODO', 'IN_PROGRESS', 'DONE'];
@@ -39,10 +40,11 @@ function useDebouncedValue<T>(value: T, delay: number): T {
 
 interface KanbanBoardProps {
     projectId: string;
-    projectTitle: string;
+    projectTitle?: string;
 }
 
-export function KanbanBoard({ projectId }: KanbanBoardProps) {
+export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: KanbanBoardProps) {
+    const { data: project } = useProject(projectId);
     const [filters, setFilters] = useState<TaskFilters>({});
     const [activeTask, setActiveTask] = useState<Task | null>(null);
     const [modalTask, setModalTask] = useState<Task | null | undefined>(undefined); // undefined = closed, null = create
@@ -57,6 +59,7 @@ export function KanbanBoard({ projectId }: KanbanBoardProps) {
     const createTask = useCreateTask(projectId);
     const updateTask = useUpdateTask(projectId);
     const deleteTask = useDeleteTask(projectId);
+
 
     const sensors = useSensors(
         useSensor(MouseSensor, {
@@ -147,8 +150,41 @@ export function KanbanBoard({ projectId }: KanbanBoardProps) {
         );
     }
 
+    const displayTitle = project?.title || projectTitle;
+    const displayDescription = project?.description;
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', boxSizing: 'border-box' }}>
+            {/* Project Header: Title & Description */}
+            <div style={{ marginBottom: '22px' }}>
+                <h1
+                    style={{
+                        fontSize: 'clamp(20px, 3.5vw, 28px)',
+                        fontWeight: 700,
+                        color: 'var(--text-primary)',
+                        letterSpacing: '-0.025em',
+                        lineHeight: 1.25,
+                        margin: 0,
+                        marginBottom: displayDescription ? '6px' : '0',
+                    }}
+                >
+                    {displayTitle}
+                </h1>
+                {displayDescription && (
+                    <p
+                        style={{
+                            fontSize: '14px',
+                            color: 'var(--text-secondary)',
+                            lineHeight: 1.5,
+                            margin: 0,
+                            maxWidth: '750px',
+                        }}
+                    >
+                        {displayDescription}
+                    </p>
+                )}
+            </div>
+
             {/* Search and Filters Bar */}
             <div style={{ marginBottom: '20px', width: '100%' }}>
                 <TaskFiltersBar filters={filters} onChange={setFilters} />
