@@ -51,7 +51,6 @@ export function useUpdateTask(projectId: string) {
 
         // Optimistic update — immediately update the task in cache before the API responds
         onMutate: async ({ taskId, data }) => {
-            // Cancel any in-flight refetches
             if (!user) return { previousTasks: [] };
 
             await queryClient.cancelQueries({
@@ -101,7 +100,36 @@ export function useDeleteTask(projectId: string) {
 
     return useMutation({
         mutationFn: (taskId: string) => deleteTaskApi(taskId),
-        onSuccess: () => {
+
+        // Optimistic removal — card disappears instantly, restores on error
+        onMutate: async (taskId) => {
+            if (!user) return { previousTasks: [] };
+
+            await queryClient.cancelQueries({
+                queryKey: QUERY_KEYS.projectTasks(user.id, projectId),
+            });
+
+            const previousTasks = queryClient.getQueriesData<Task[]>({
+                queryKey: QUERY_KEYS.projectTasks(user.id, projectId),
+            });
+
+            queryClient.setQueriesData<Task[]>(
+                { queryKey: QUERY_KEYS.projectTasks(user.id, projectId) },
+                (old) => old?.filter((t) => t.id !== taskId) ?? [],
+            );
+
+            return { previousTasks };
+        },
+
+        onError: (_err, _vars, context) => {
+            if (context?.previousTasks) {
+                for (const [queryKey, data] of context.previousTasks) {
+                    queryClient.setQueryData(queryKey, data);
+                }
+            }
+        },
+
+        onSettled: () => {
             if (user) {
                 queryClient.invalidateQueries({
                     queryKey: QUERY_KEYS.projectTasks(user.id, projectId),

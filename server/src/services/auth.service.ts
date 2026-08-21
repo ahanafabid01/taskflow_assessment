@@ -8,7 +8,7 @@ import { config } from '../config/env';
 import { AppError } from '../middleware/error.middleware';
 import type { RegisterInput, LoginInput } from '../validators/auth.validators';
 
-const BCRYPT_ROUNDS = 12;
+const BCRYPT_ROUNDS = 10;
 
 function signToken(userId: string, email: string, name: string): string {
     return jwt.sign(

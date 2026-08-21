@@ -10,7 +10,10 @@ import type { CreateTaskInput, UpdateTaskInput, TaskQueryInput } from '../valida
  * Owners can view every task; collaborators can view only tasks assigned to them.
  */
 async function assertProjectAccess(projectId: string, userId: string): Promise<boolean> {
-    const project = await prisma.project.findUnique({ where: { id: projectId } });
+    const project = await prisma.project.findUnique({
+        where: { id: projectId },
+        select: { ownerId: true },
+    });
     if (!project) throw new AppError(404, 'Project not found');
 
     if (project.ownerId === userId) return true;

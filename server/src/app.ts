@@ -23,8 +23,8 @@ app.use(
   }),
 );
 
-// Parse JSON bodies
-app.use(express.json());
+// Parse JSON bodies (with size limit to prevent payload abuse)
+app.use(express.json({ limit: '50kb' }));
 
 // Health check
 app.get('/health', (_req, res) => {
