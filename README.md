@@ -48,12 +48,15 @@ Copy-Item server/.env.example server/.env
 
 Required values are documented in [`server/.env.example`](server/.env.example). Never commit `server/.env`.
 
-Install server dependencies, generate Prisma Client, and synchronize a fresh development database:
+Install server dependencies, generate Prisma Client, and use the current DB or synchronize a fresh development database:
 
 ```powershell
 cd server
 npm install
 npx prisma generate
+# Run only when connecting to a new, empty database - Here it's connected with neon DB, THe Database URL is already in .env.example file and the schema is already pushed there.
+
+
 npx prisma db push
 ```
 
@@ -79,8 +82,26 @@ With the server environment configured, run:
 cd server
 npm run db:seed
 ```
-
+Note: Use it only if you want to test with a new Database connection. Otherwise skip this step. 
 The seed creates five demo users, 50 projects, and varied task counts. It is intended for a development database only.
+
+### Demo login credentials
+
+After running the seed, use any account below. All demo accounts use the same development-only password:
+
+```text
+TaskFlowDemo2026!
+```
+
+| Name | Email | Access |
+| --- | --- | --- |
+| Abid Rahman | `abid@taskflow.demo` | Project owner; sees all seeded projects and tasks |
+| Nadia Islam | `nadia@taskflow.demo` | Collaborator; sees assigned projects and tasks |
+| Tanvir Hasan | `tanvir@taskflow.demo` | Collaborator; sees assigned projects and tasks |
+| Sadia Ahmed | `sadia@taskflow.demo` | Collaborator; sees assigned projects and tasks |
+| Rafi Karim | `rafi@taskflow.demo` | Collaborator; sees assigned projects and tasks |
+
+These credentials are generated only by `npm run db:seed`; do not use them in a production deployment.
 
 ### 4. Start the application
 
