@@ -451,7 +451,7 @@ export function ProjectList() {
                         </p>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                    <div className="page-header-actions">
                         {/* View Switcher: Cards vs Table */}
                         <div
                             role="group"
@@ -517,7 +517,7 @@ export function ProjectList() {
                             </button>
                         </div>
 
-                        {/* New Project Button */}
+                        {/* New Project Button at right corner */}
                         <button
                             id="open-create-project"
                             onClick={() => setShowModal(true)}
@@ -535,6 +535,8 @@ export function ProjectList() {
                                 fontWeight: 600,
                                 cursor: 'pointer',
                                 boxShadow: '0 1px 3px rgba(12, 62, 120, 0.2)',
+                                flexShrink: 0,
+                                marginLeft: 'auto',
                             }}
                         >
                             <Plus size={16} /> New Project

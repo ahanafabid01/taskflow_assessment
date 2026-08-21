@@ -275,11 +275,24 @@ input[type="date"]::-webkit-datetime-edit-fields-wrapper {
   margin-bottom: var(--section-gap);
   width: 100%;
 }
+
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+}
+
 @media (min-width: 640px) {
   .page-header {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+  }
+  .page-header-actions {
+    width: auto;
+    justify-content: flex-end;
   }
 }
 
