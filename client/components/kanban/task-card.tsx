@@ -18,11 +18,12 @@ const PRIORITY_CONFIG: Record<TaskPriority, { pill: string; label: string }> = {
 interface TaskCardProps {
     task: Task;
     onEdit: (task: Task) => void;
-    onDelete: (taskId: string) => void;
+    onDelete?: (taskId: string) => void;
+    canDelete?: boolean;
     isDragOverlay?: boolean;
 }
 
-export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: TaskCardProps) {
+export function TaskCard({ task, onEdit, onDelete, canDelete = true, isDragOverlay = false }: TaskCardProps) {
     const [showMenu, setShowMenu] = useState(false);
     const {
         attributes, listeners, setNodeRef, transform, transition, isDragging,
@@ -91,18 +92,20 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay = false }: Task
                                     <Pencil size={13} className="text-brand" />
                                     Edit
                                 </button>
-                                <button
-                                    onPointerDown={(e) => e.stopPropagation()}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setShowMenu(false);
-                                        onDelete(task.id);
-                                    }}
-                                    className="flex items-center gap-2 w-full text-left px-3 py-2.5 bg-transparent border-none text-red-600 text-[13px] font-medium cursor-pointer hover:bg-red-50 transition-colors"
-                                >
-                                    <Trash2 size={13} />
-                                    Delete
-                                </button>
+                                {canDelete && onDelete && (
+                                    <button
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowMenu(false);
+                                            onDelete(task.id);
+                                        }}
+                                        className="flex items-center gap-2 w-full text-left px-3 py-2.5 bg-transparent border-none text-red-600 text-[13px] font-medium cursor-pointer hover:bg-red-50 transition-colors"
+                                    >
+                                        <Trash2 size={13} />
+                                        Delete
+                                    </button>
+                                )}
                             </div>
                         </>
                     )}

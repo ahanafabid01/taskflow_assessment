@@ -23,6 +23,7 @@ import { TaskModal } from '../tasks/task-modal';
 import { TaskFiltersBar } from '../tasks/task-filters';
 import { useProjectTasks, useCreateTask, useUpdateTask, useDeleteTask } from '@/hooks/use-tasks';
 import { useProject } from '@/hooks/use-projects';
+import { useAuth } from '@/lib/auth/auth-context';
 import { KanbanBoardSkeleton } from '@/components/ui/loading';
 import type { Task, TaskStatus, TaskFilters, CreateTaskInput, UpdateTaskInput } from '@/types';
 
@@ -106,7 +107,9 @@ interface KanbanBoardProps {
 }
 
 export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: KanbanBoardProps) {
+    const { user } = useAuth();
     const { data: project } = useProject(projectId);
+    const isOwner = Boolean(project && user && project.ownerId === user.id);
     const [filters, setFilters] = useState<TaskFilters>({});
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
     const [activeTask, setActiveTask] = useState<Task | null>(null);
@@ -280,7 +283,10 @@ export function KanbanBoard({ projectId, projectTitle = 'Project Board' }: Kanba
                                 tasks={tasksByStatus[status]}
                                 onEditTask={(task) => setModalTask(task)}
                                 onDeleteTask={handleDeleteTask}
+                                canCreate={isOwner}
+                                canDelete={isOwner}
                                 onAddTask={() => {
+                                    if (!isOwner) return;
                                     setDefaultStatus(status);
                                     setModalTask(null);
                                 }}
